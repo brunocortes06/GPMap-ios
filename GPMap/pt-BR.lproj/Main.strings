@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "Sair"; ObjectID = "6J2-6t-Jly"; */
+"6J2-6t-Jly.normalTitle" = "Sair";
+
+/* Class = "UITextField"; placeholder = "Senha"; ObjectID = "BKn-RQ-EwA"; */
+"BKn-RQ-EwA.placeholder" = "Senha";
+
+/* Class = "UIButton"; normalTitle = "Entrar"; ObjectID = "MvS-NN-q67"; */
+"MvS-NN-q67.normalTitle" = "Entrar";
+
+/* Class = "UIButton"; normalTitle = "Crir conta"; ObjectID = "bDR-3f-Xx3"; */
+"bDR-3f-Xx3.normalTitle" = "Crir conta";
+
+/* Class = "UITextField"; accessibilityHint = "email"; ObjectID = "bg1-8i-e05"; */
+"bg1-8i-e05.accessibilityHint" = "email";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "bg1-8i-e05"; */
+"bg1-8i-e05.placeholder" = "Email";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "o8N-7H-ins"; */
+"o8N-7H-ins.text" = "Label";
