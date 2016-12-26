@@ -22,6 +22,12 @@
 		9AADE54F1E087FD40009D5D8 /* GFGeoHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE5461E087FD40009D5D8 /* GFGeoHash.m */; };
 		9AADE5501E087FD40009D5D8 /* GFGeoHashQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE5481E087FD40009D5D8 /* GFGeoHashQuery.m */; };
 		9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE54A1E087FD40009D5D8 /* GFQuery.m */; };
+		9AF071761E11CB8500F29598 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071701E11CB8500F29598 /* AnnotationView.swift */; };
+		9AF071771E11CB8500F29598 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071711E11CB8500F29598 /* CustomAnnotation.swift */; };
+		9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071721E11CB8500F29598 /* CustomCalloutView.swift */; };
+		9AF071791E11CB8500F29598 /* CustomCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AF071731E11CB8500F29598 /* CustomCalloutView.xib */; };
+		9AF0717A1E11CB8500F29598 /* girl-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 9AF071741E11CB8500F29598 /* girl-pin.png */; };
+		9AF0717B1E11CB8500F29598 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071751E11CB8500F29598 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +80,12 @@
 		9AADE54A1E087FD40009D5D8 /* GFQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GFQuery.m; sourceTree = "<group>"; };
 		9AADE54B1E087FD40009D5D8 /* GFQuery+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GFQuery+Private.h"; sourceTree = "<group>"; };
 		9AADE54C1E087FD40009D5D8 /* GFRegionQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFRegionQuery.h; sourceTree = "<group>"; };
+		9AF071701E11CB8500F29598 /* AnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		9AF071711E11CB8500F29598 /* CustomAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
+		9AF071721E11CB8500F29598 /* CustomCalloutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCalloutView.swift; sourceTree = "<group>"; };
+		9AF071731E11CB8500F29598 /* CustomCalloutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCalloutView.xib; sourceTree = "<group>"; };
+		9AF071741E11CB8500F29598 /* girl-pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "girl-pin.png"; sourceTree = "<group>"; };
+		9AF071751E11CB8500F29598 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DA400A9F2BF880337FE119FB /* Pods-GPMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GPMap/Pods-GPMap.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +141,12 @@
 			isa = PBXGroup;
 			children = (
 				9AADE53D1E087FB50009D5D8 /* Geofire */,
+				9AF071701E11CB8500F29598 /* AnnotationView.swift */,
+				9AF071711E11CB8500F29598 /* CustomAnnotation.swift */,
+				9AF071721E11CB8500F29598 /* CustomCalloutView.swift */,
+				9AF071731E11CB8500F29598 /* CustomCalloutView.xib */,
+				9AF071741E11CB8500F29598 /* girl-pin.png */,
+				9AF071751E11CB8500F29598 /* User.swift */,
 				9A632F951E08680F00A23309 /* GoogleService-Info.plist */,
 				9A767EBA1E0344E800C17C75 /* AppDelegate.swift */,
 				9A767EBC1E0344E800C17C75 /* ViewController.swift */,
@@ -318,6 +336,8 @@
 				9A767EC51E0344E800C17C75 /* LaunchScreen.storyboard in Resources */,
 				9A632F961E08680F00A23309 /* GoogleService-Info.plist in Resources */,
 				9A767EC21E0344E800C17C75 /* Assets.xcassets in Resources */,
+				9AF0717A1E11CB8500F29598 /* girl-pin.png in Resources */,
+				9AF071791E11CB8500F29598 /* CustomCalloutView.xib in Resources */,
 				9A767EC01E0344E800C17C75 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,11 +412,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A767EBD1E0344E800C17C75 /* ViewController.swift in Sources */,
+				9AF071761E11CB8500F29598 /* AnnotationView.swift in Sources */,
 				9AADE54E1E087FD40009D5D8 /* GFBase32Utils.m in Sources */,
 				9AADE5501E087FD40009D5D8 /* GFGeoHashQuery.m in Sources */,
 				9AADE54D1E087FD40009D5D8 /* GeoFire.m in Sources */,
 				9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */,
 				9AADE54F1E087FD40009D5D8 /* GFGeoHash.m in Sources */,
+				9AF071771E11CB8500F29598 /* CustomAnnotation.swift in Sources */,
+				9AF0717B1E11CB8500F29598 /* User.swift in Sources */,
+				9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */,
 				9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */,
 				9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */,
 			);

@@ -92,7 +92,9 @@
                     <navigationItem key="navigationItem" id="3kG-TO-O1X"/>
                     <connections>
                         <outlet property="UserLabel" destination="o8N-7H-ins" id="qRU-2j-ecz"/>
+                        <outlet property="createAccBtn" destination="bDR-3f-Xx3" id="LpS-42-xcg"/>
                         <outlet property="emailField" destination="bg1-8i-e05" id="ien-jW-gOW"/>
+                        <outlet property="loginBtn" destination="MvS-NN-q67" id="8cr-U8-2Z9"/>
                         <outlet property="logoutBtn" destination="6J2-6t-Jly" id="QyN-Ft-BFp"/>
                         <outlet property="passField" destination="BKn-RQ-EwA" id="FTX-kz-Yjs"/>
                         <segue destination="Ue6-IW-OYY" kind="show" identifier="ShowMap" id="1fA-XL-d32"/>

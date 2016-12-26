@@ -14,20 +14,26 @@ import FirebaseDatabase
 import GeoFire
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
-
+    
     @IBOutlet weak var UserLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passField: UITextField!
+    @IBOutlet weak var createAccBtn: UIButton!
+    @IBOutlet weak var loginBtn: UIButton!
     @IBOutlet weak var logoutBtn: UIButton!
+
     
+    var long:Double = 0.0
+    var lat:Double = 0.0
     let locationManager = CLLocationManager()
     var uid:String = ""
+    var didFindLocation:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//         Background
-//        self.locationManager.requestAlwaysAuthorization()
+        //         Background
+        //        self.locationManager.requestAlwaysAuthorization()
         
         // For use in foreground
         self.locationManager.requestWhenInUseAuthorization()
@@ -36,17 +42,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
+            if(!didFindLocation){
+                locationManager.requestLocation()
+                if ((FIRAuth.auth()?.currentUser) != nil){
+                    self.logoutBtn.alpha = 0.0
+                    self.loginBtn.alpha = 0.0
+                    self.emailField.alpha = 0.0
+                    self.passField.alpha = 0.0
+                    self.createAccBtn.alpha = 0.0
+                    self.UserLabel.text = "Aguarde, determinando localização"
+                }
+            }
         }
         
         
         // Do any additional setup after loading the view, typically from a nib.
         
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        didFindLocation = true
+        
+        //        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        //        print("locations = \(uid) \(locValue.latitude) \(locValue.longitude)")
+        
+        lat = manager.location!.coordinate.latitude
+        long = manager.location!.coordinate.longitude
+        
+        locationManager.stopUpdatingLocation()
+        // set da coordenada
+        setLocation(coord: manager.location!)
+        
+        
+        //Se ja pegou a loclizacao e ja esta logado, chamar proxima segue
         if let user =  FIRAuth.auth()?.currentUser{
             self.logoutBtn.alpha = 1.0
             self.UserLabel.text = user.email
             uid = (FIRAuth.auth()?.currentUser?.uid)!
-            
             self.performSegue(withIdentifier: "ShowMap", sender: self)
         }else{
             self.logoutBtn.alpha = 0.0
@@ -54,22 +86,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        setLocation(coord: manager.location!)
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error on locationManager \(error)")
     }
     
-//    func locationManager(_ mager: CLLocationManager!, didFailWithError error: Error!){
-//        
-//    }
     
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     @IBAction func creteAccAction(_ sender: Any) {
         if self.emailField.text == "" || self.passField.text == ""{
             let alertcontroller = UIAlertController(title: "opa", message: "email ou senha em branco", preferredStyle: .alert)
@@ -90,12 +116,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     alertcontroller.addAction(defaultAction)
                     
                     self.present(alertcontroller, animated: true, completion: nil)
-
+                    
                 }
             })
         }
     }
-
+    
     @IBAction func loginAction(_ sender: Any) {
         
         if self.emailField.text == "" || self.passField.text == ""{
@@ -128,13 +154,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     
     @IBAction func logoutAction(_ sender: Any) {
-        
         try! FIRAuth.auth()?.signOut()
         self.UserLabel.text = ""
         self.logoutBtn.alpha = 0.0
         self.emailField.text = ""
         self.passField.text = ""
-        
         
     }
     
@@ -149,6 +173,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if segue.identifier == "ShowMap" {
             let mapViewController = (segue.destination as! MapViewController)
             mapViewController.uid = uid
+            mapViewController.lat = lat
+            mapViewController.long = long
         }
     }
     
