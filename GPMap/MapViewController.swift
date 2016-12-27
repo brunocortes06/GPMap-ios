@@ -15,6 +15,7 @@ import GeoFire
 
 class MapViewController: UIViewController,MKMapViewDelegate {
     
+    @IBOutlet weak var menuBtn: UIBarButtonItem!
     @IBOutlet weak var Map: MKMapView!
     
 //    var userHash = [String: User]()
@@ -26,6 +27,12 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if self.revealViewController() != nil {
+            menuBtn.target = self.revealViewController()
+            menuBtn.action = #selector(SWRevealViewController.revealToggle(_:))
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        }
         
         // Do any additional setup after loading the view.
         

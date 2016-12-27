@@ -21,7 +21,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var createAccBtn: UIButton!
     @IBOutlet weak var loginBtn: UIButton!
     @IBOutlet weak var logoutBtn: UIButton!
-
+    
     
     var long:Double = 0.0
     var lat:Double = 0.0
@@ -70,8 +70,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         long = manager.location!.coordinate.longitude
         
         locationManager.stopUpdatingLocation()
-        // set da coordenada
-        setLocation(coord: manager.location!)
+        
         
         
         //Se ja pegou a loclizacao e ja esta logado, chamar proxima segue
@@ -79,6 +78,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.logoutBtn.alpha = 1.0
             self.UserLabel.text = user.email
             uid = (FIRAuth.auth()?.currentUser?.uid)!
+            // set da coordenada
+            setLocation(coord: manager.location!)
             self.performSegue(withIdentifier: "ShowMap", sender: self)
         }else{
             self.logoutBtn.alpha = 0.0
@@ -138,6 +139,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     self.emailField.text = ""
                     self.passField.text = ""
                     
+                    // set da coordenada
+                    let coord = CLLocation(latitude: self.lat, longitude: self.long)
+                    
+                    self.setLocation(coord: coord)
+                    
                     self.performSegue(withIdentifier: "ShowMap", sender: self)
                 }else{
                     let alertcontroller = UIAlertController(title: "opa", message: error?.localizedDescription , preferredStyle: .alert)
@@ -163,19 +169,44 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func setLocation(coord: CLLocation){
-        let geofireRef = FIRDatabase.database().reference().child("locations")
-        let geoFire = GeoFire(firebaseRef: geofireRef)
-        geoFire?.setLocation(coord, forKey: FIRAuth.auth()?.currentUser?.uid)
+        if(FIRAuth.auth()?.currentUser?.uid != nil){
+            let geofireRef = FIRDatabase.database().reference().child("locations")
+            let geoFire = GeoFire(firebaseRef: geofireRef)
+            print(FIRAuth.auth()?.currentUser?.uid as Any)
+            print(coord)
+            geoFire?.setLocation(coord, forKey: FIRAuth.auth()?.currentUser?.uid)
+        }
         //print("setGeoFire = \(coord) \(coord.coordinate.latitude) \(coord.coordinate.longitude)")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowMap" {
-            let mapViewController = (segue.destination as! MapViewController)
-            mapViewController.uid = uid
-            mapViewController.lat = lat
-            mapViewController.long = long
-        }
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let sw = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+        
+        self.view.window?.rootViewController = sw
+        
+        let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+        
+        let navigationController = UINavigationController(rootViewController: destinationController)
+        
+        sw.pushFrontViewController(navigationController, animated: true)
+        destinationController.uid = uid
+        destinationController.lat = lat
+        destinationController.long = long
+        
+//        if segue.identifier == "ShowMap" {
+        
+//            let nav = segue.destination as! UINavigationController
+//            let mapViewController = nav.topViewController as! MapViewController
+
+            
+//           antes da nav bar let mapViewController = (segue.destination as! MapViewController)
+//            mapViewController.uid = uid
+//            mapViewController.lat = lat
+//            mapViewController.long = long
+//        }
     }
     
 }
