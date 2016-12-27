@@ -39,7 +39,7 @@ struct User {
         self.description = (snapShot.value as? NSDictionary)?["description"] as? String ?? ""
         self.hair = (snapShot.value as? NSDictionary)?["hair"] as? String ?? ""
         self.skin = (snapShot.value as? NSDictionary)?["skin"] as? String ?? ""
-        self.tel = (snapShot.value as? NSDictionary)?["name"] as? String ?? ""
+        self.tel = (snapShot.value as? NSDictionary)?["tel"] as? String ?? ""
         self.photo = (snapShot.value as? NSDictionary)?["photo"] as? String ?? ""
         
 //        self.name = ((snapShot.value! as! NSDictionary)["name"] as! String)

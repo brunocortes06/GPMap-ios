@@ -17,14 +17,12 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     
     @IBOutlet weak var Map: MKMapView!
     
-    //    var users: Array<FIRDataSnapshot> = []
-    var userHash = [String: User]()
-    
+//    var userHash = [String: User]()
+    let noPhoto:String = "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac"
     var uid:String = ""
     var lat:Double = 0.0
     var long:Double = 0.0
     var ref = FIRDatabase.database().reference()
-    //    let user: User = User()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +39,7 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         
         
         circleQuery?.observe(.keyEntered, with: { (key: String?, location: CLLocation?) in
-//            self.getUserData(key: key!, location:location!)
+            self.getUserData(key: key!, location:location!)
         })
         
         circleQuery?.observeReady({
@@ -49,22 +47,18 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         })
         
         let location = CLLocationCoordinate2DMake(lat, long)
-//        let annotation = MKPointAnnotation()
-//        
-//        annotation.coordinate.longitude = location.longitude
-//        annotation.coordinate.latitude = location.latitude
-//        annotation.title = "teste"
-//        annotation.subtitle = "testesub"
-        
+
         self.Map.delegate = self
         let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
         
         //Carregar foto de perfil
-        point.image = UIImage(named: "girl-pin.png")
+        let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac")
+        let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+        point.image = UIImage(data: data!)
+//        point.image = UIImage(named: "girl-pin.png")
         point.name = "teste"
         point.address = "adress"
         point.phone = "phone"
-//        self.mapView.addAnnotation(point)
         
         let span = MKCoordinateSpanMake(0.09, 0.09)
         
@@ -73,7 +67,6 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         Map.setRegion(region, animated: true)
         
         Map.addAnnotation(point)
-//        Map.addAnnotation(annotation)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -120,11 +113,13 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         calloutView.starbucksName.text = customAnnotation.name
         calloutView.starbucksAddress.text = customAnnotation.address
         calloutView.starbucksPhone.text = customAnnotation.phone
+        
+        let button = UIButton(frame: calloutView.starbucksPhone.frame)
+        button.addTarget(self, action: #selector(self.callPhoneNumber(sender:)), for: .touchUpInside)
+        calloutView.addSubview(button)
+        
         calloutView.starbucksImage.image = customAnnotation.image
-//        let button = UIButton(frame: calloutView.starbucksPhone.frame)
-//        button.addTarget(self, action: #selector(ViewController.callPhoneNumber(sender:)), for: .touchUpInside)
-//        calloutView.addSubview(button)
-        // 3
+        
         calloutView.center = CGPoint(x: view.bounds.size.width / 2, y: -calloutView.bounds.size.height*0.52)
         view.addSubview(calloutView)
         mapView.setCenter((view.annotation?.coordinate)!, animated: true)
@@ -147,66 +142,57 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         
     }
     
-//    func downloadImage(url: URL) {
-//        print("Download Started")
-//        getDataFromUrl(url: url) { (data, response, error)  in
-//            guard let data = data, error == nil else { return }
-//            print(response?.suggestedFilename ?? url.lastPathComponent)
-//            print("Download Finished")
-//            DispatchQueue.main.async() { () -> Void in
-//                self.imageView.image = UIImage(data: data)
-//            }
-//        }
-//    }
-    
     func getUserData(key: String, location: CLLocation) /*-> Dictionary<String, User> */{
         ref.child("users").child(key).observe(.value, with: { (snapshot) in
-            
-            //            let key = (snapshot.key)
-            
+
             let user = User(snapShot: snapshot)
-            self.userHash[key] = user
+//            self.userHash[key] = user
             
             if(user.name != ""){
+                var url = URL(string: "")
+                if(user.photo != ""){
+                    url = URL(string: user.photo)
+                }else{
+                    url = URL(string: self.noPhoto)
+                }
                 
-//                if let checkedUrl = URL(string: user.) {
-//                    imageView.contentMode = .scaleAspectFit
-//                    downloadImage(url: checkedUrl)
-//                }
+
+//                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+                let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude ))
+                DispatchQueue.global().async {
+                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+                    DispatchQueue.main.async {
+                        point.image = UIImage(data: data!)
+                    }
+                }
                 
-                let location = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-                let annotation = MKPointAnnotation()
-                
-                annotation.coordinate.longitude = location.longitude
-                annotation.coordinate.latitude = location.latitude
-                annotation.title = user.name
-                annotation.subtitle = user.age
-                
-                //            let span = MKCoordinateSpanMake(0.09, 0.09)
-                
-                //            let region = MKCoordinateRegion(center: location, span: span)
-                
-                //            Map.setRegion(region, animated: true)
+                let userLocation = CLLocation(latitude: self.lat, longitude: self.long)
+                let otherUser = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                 
                 
-                self.Map.addAnnotation(annotation)
+                let distanceInKm = (userLocation.distance(from: otherUser))/1000 // result is in meters
+//              point.image = UIImage(data: data!)
+                point.name = user.name
+                point.address = "Distância: \(round(distanceInKm)) Km"
+                point.phone = user.tel
+
+                self.Map.addAnnotation(point)
             }else{
 //                print("key \(key)")
             }
             
         })
-        //        return self.userHash
     }
     
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    func callPhoneNumber(sender: UIButton)
+    {
+        let v = sender.superview as! CustomCalloutView
+        if let url = URL(string: "telprompt://\(v.starbucksPhone.text!)"), UIApplication.shared.canOpenURL(url)
+        {
+//            UIApplication.shared.openURL( url)
+            let options = [UIApplicationOpenURLOptionUniversalLinksOnly : true]
+            UIApplication.shared.open(url, options: options, completionHandler: nil)
+        }
+    }
     
 }
