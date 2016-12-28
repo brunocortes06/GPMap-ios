@@ -122,20 +122,23 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }else{
                     url = URL(string: self.noPhoto)
                 }
+                 self.imgProfile?.loadImgUsingCache(url: url!)
                 
-                DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                    DispatchQueue.main.async {
-                        let pinImage = UIImage(data: data!)
-                        let size = CGSize(width: 143, height: 128)
-                        UIGraphicsBeginImageContext(size)
-                        let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
-                        pinImage!.draw(in: rect)
-                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-                        UIGraphicsEndImageContext()
-                        self.imgProfile?.image = resizedImage
-                    }
-                }
+//                DispatchQueue.global().async {
+//                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+//                    DispatchQueue.main.async {
+//                        let pinImage = UIImage(data: data!)
+//                        let size = CGSize(width: 143, height: 128)
+//                        UIGraphicsBeginImageContext(size)
+//                        let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
+//                        pinImage!.draw(in: rect)
+//                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+//                        UIGraphicsEndImageContext()
+//                        self.imgProfile?.image = resizedImage
+//                        self.imgProfile?.layer.cornerRadius = 20
+//                        self.imgProfile?.layer.masksToBounds = true
+//                    }
+//                }
             }
             
         })

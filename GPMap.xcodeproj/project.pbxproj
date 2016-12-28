@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		721D260A57312D622B89EC29 /* Pods_GPMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1C45543AF50C5210198C5 /* Pods_GPMap.framework */; };
 		9A05256F1E1407EE001428B7 /* ProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */; };
+		9A0525731E14429B001428B7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0525721E14429B001428B7 /* Extensions.swift */; };
 		9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A632F931E0867BF00A23309 /* MapViewController.swift */; };
 		9A632F961E08680F00A23309 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A632F951E08680F00A23309 /* GoogleService-Info.plist */; };
 		9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A767EBA1E0344E800C17C75 /* AppDelegate.swift */; };
@@ -56,6 +57,7 @@
 		5681C13964112287F2146758 /* Pods-GPMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPMap.release.xcconfig"; path = "Pods/Target Support Files/Pods-GPMap/Pods-GPMap.release.xcconfig"; sourceTree = "<group>"; };
 		7EA1C45543AF50C5210198C5 /* Pods_GPMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GPMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePhotoViewController.swift; sourceTree = "<group>"; };
+		9A0525721E14429B001428B7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9A632F931E0867BF00A23309 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		9A632F951E08680F00A23309 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9A767EB71E0344E800C17C75 /* GPMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +180,14 @@
 			name = Menu;
 			sourceTree = "<group>";
 		};
+		9A0525711E144283001428B7 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9A0525721E14429B001428B7 /* Extensions.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		9A767EAE1E0344E700C17C75 = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +213,7 @@
 		9A767EB91E0344E800C17C75 /* GPMap */ = {
 			isa = PBXGroup;
 			children = (
+				9A0525711E144283001428B7 /* Utils */,
 				9A05256C1E140702001428B7 /* Annotation */,
 				9A05256D1E14072E001428B7 /* Menu */,
 				9A05256B1E1406EB001428B7 /* Model */,
@@ -493,6 +504,7 @@
 				9AF0717B1E11CB8500F29598 /* User.swift in Sources */,
 				9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */,
 				9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */,
+				9A0525731E14429B001428B7 /* Extensions.swift in Sources */,
 				9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */,
 				9ADCA0A81E130A130054C684 /* MenuTableViewCell.swift in Sources */,
 			);

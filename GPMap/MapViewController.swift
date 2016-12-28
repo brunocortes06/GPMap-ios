@@ -166,25 +166,21 @@ class MapViewController: UIViewController,MKMapViewDelegate {
 
 //                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
                 let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude ))
-                DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                    DispatchQueue.main.async {
-                        point.image = UIImage(data: data!)
-                    }
-                }
+                
+                //Carrego a imagem do cache
+                point.loadImgUsingCache(url: url!)
                 
                 let userLocation = CLLocation(latitude: self.lat, longitude: self.long)
                 let otherUser = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                 
                 
                 let distanceInKm = (userLocation.distance(from: otherUser))/1000 // result is in meters
-//              point.image = UIImage(data: data!)
                 point.name = user.name
                 point.address = "Distância: \(round(distanceInKm)) Km"
                 point.phone = user.tel
 
                 self.Map.addAnnotation(point)
-            }else{
+//            }else{
 //                print("key \(key)")
             }
             
