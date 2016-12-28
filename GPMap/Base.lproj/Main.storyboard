@@ -141,6 +141,46 @@
             </objects>
             <point key="canvasLocation" x="2744.8000000000002" y="138.98050974512745"/>
         </scene>
+        <!--Profile Photo View Controller-->
+        <scene sceneID="3Id-XN-FxZ">
+            <objects>
+                <viewController storyboardIdentifier="ProfilePhotoViewController" id="j7c-mb-z5b" customClass="ProfilePhotoViewController" customModule="GPMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VTG-3a-yeV"/>
+                        <viewControllerLayoutGuide type="bottom" id="2sd-F8-Drf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lFc-99-7Wr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vr2-hc-bUU">
+                                <rect key="frame" x="135" y="318" width="104" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Selecionar foto"/>
+                                <connections>
+                                    <action selector="selectPhotoAct:" destination="j7c-mb-z5b" eventType="touchUpInside" id="wzd-wN-HLX"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1PV-yQ-pwC">
+                                <rect key="frame" x="67" y="112" width="240" height="198"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="pQY-I9-RG4">
+                        <barButtonItem key="leftBarButtonItem" image="menu2.png" id="voK-D7-znG"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="menuBtn" destination="voK-D7-znG" id="Xax-Gf-fpJ"/>
+                        <outlet property="profileImg" destination="1PV-yQ-pwC" id="FQc-6Y-Vi0"/>
+                        <outlet property="selectPhoto" destination="vr2-hc-bUU" id="DdC-tA-9DA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="08B-0o-DPz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1076" y="1599.8500749625189"/>
+        </scene>
         <!--Reveal View Controller-->
         <scene sceneID="oh3-5P-Cbc">
             <objects>
@@ -251,6 +291,7 @@
                     </view>
                     <connections>
                         <outlet property="imgProfile" destination="ssz-Yg-nOR" id="AbE-J7-sjP"/>
+                        <segue destination="sJB-Xm-03Z" kind="custom" identifier="sw_photo" customClass="SWRevealViewControllerSeguePushController" id="jfw-zs-SSX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoV-Xr-ZSs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -274,6 +315,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zp0-7D-oil" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1805.5999999999999" y="138.98050974512745"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="EwW-g6-USC">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="sJB-Xm-03Z" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="BJV-Ni-eM3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="j7c-mb-z5b" kind="relationship" relationship="rootViewController" id="sVk-30-ntS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YPd-0o-4L7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="1599.8500749625189"/>
         </scene>
     </scenes>
     <resources>
