@@ -125,6 +125,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9A0525691E14069B001428B7 /* SupportFiles */ = {
+			isa = PBXGroup;
+			children = (
+				9AF071741E11CB8500F29598 /* girl-pin.png */,
+				9ADCA0A31E1308A00054C684 /* menu2.png */,
+				9A767EC11E0344E800C17C75 /* Assets.xcassets */,
+				9A632F951E08680F00A23309 /* GoogleService-Info.plist */,
+				9A767EC61E0344E800C17C75 /* Info.plist */,
+			);
+			name = SupportFiles;
+			sourceTree = "<group>";
+		};
+		9A05256A1E1406BF001428B7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				9A767EBC1E0344E800C17C75 /* ViewController.swift */,
+				9A632F931E0867BF00A23309 /* MapViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		9A05256B1E1406EB001428B7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9AF071751E11CB8500F29598 /* User.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		9A05256C1E140702001428B7 /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				9AF071701E11CB8500F29598 /* AnnotationView.swift */,
+				9AF071711E11CB8500F29598 /* CustomAnnotation.swift */,
+				9AF071721E11CB8500F29598 /* CustomCalloutView.swift */,
+				9AF071731E11CB8500F29598 /* CustomCalloutView.xib */,
+			);
+			name = Annotation;
+			sourceTree = "<group>";
+		};
+		9A05256D1E14072E001428B7 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				9ADCA0A51E1309F00054C684 /* MenuViewController.swift */,
+				9ADCA0A71E130A130054C684 /* MenuTableViewCell.swift */,
+			);
+			name = Menu;
+			sourceTree = "<group>";
+		};
 		9A767EAE1E0344E700C17C75 = {
 			isa = PBXGroup;
 			children = (
@@ -150,25 +199,16 @@
 		9A767EB91E0344E800C17C75 /* GPMap */ = {
 			isa = PBXGroup;
 			children = (
-				9AF071741E11CB8500F29598 /* girl-pin.png */,
-				9ADCA0A31E1308A00054C684 /* menu2.png */,
+				9A05256D1E14072E001428B7 /* Menu */,
+				9A05256C1E140702001428B7 /* Annotation */,
+				9A05256B1E1406EB001428B7 /* Model */,
+				9A05256A1E1406BF001428B7 /* ViewControllers */,
+				9A0525691E14069B001428B7 /* SupportFiles */,
 				9AD33ABD1E12BE8700053DB9 /* SWRevealViewController */,
 				9AADE53D1E087FB50009D5D8 /* Geofire */,
-				9AF071701E11CB8500F29598 /* AnnotationView.swift */,
-				9AF071711E11CB8500F29598 /* CustomAnnotation.swift */,
-				9AF071721E11CB8500F29598 /* CustomCalloutView.swift */,
-				9AF071731E11CB8500F29598 /* CustomCalloutView.xib */,
-				9AF071751E11CB8500F29598 /* User.swift */,
-				9A632F951E08680F00A23309 /* GoogleService-Info.plist */,
 				9A767EBA1E0344E800C17C75 /* AppDelegate.swift */,
-				9A767EBC1E0344E800C17C75 /* ViewController.swift */,
-				9A632F931E0867BF00A23309 /* MapViewController.swift */,
 				9A767EBE1E0344E800C17C75 /* Main.storyboard */,
-				9ADCA0A51E1309F00054C684 /* MenuViewController.swift */,
-				9ADCA0A71E130A130054C684 /* MenuTableViewCell.swift */,
-				9A767EC11E0344E800C17C75 /* Assets.xcassets */,
 				9A767EC31E0344E800C17C75 /* LaunchScreen.storyboard */,
-				9A767EC61E0344E800C17C75 /* Info.plist */,
 			);
 			path = GPMap;
 			sourceTree = "<group>";
