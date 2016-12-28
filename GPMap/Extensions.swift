@@ -15,6 +15,7 @@ extension UIImageView {
     
     func loadImgUsingCache(url: URL) {
         
+        self.image = nil
         
         if let cachedImg = imgCache.object(forKey: url as AnyObject) as? UIImage{
             self.image = cachedImg
@@ -55,6 +56,7 @@ extension CustomAnnotation{
     
     func loadImgUsingCache(url: URL) {
         
+        self.image = nil
         
         if let cachedImg = imgCache.object(forKey: url as AnyObject) as? UIImage{
             self.image = cachedImg
