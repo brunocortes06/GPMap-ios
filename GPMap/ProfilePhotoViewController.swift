@@ -73,12 +73,13 @@ class ProfilePhotoViewController: UIViewController, UIImagePickerControllerDeleg
         
         if let uploadData = UIImagePNGRepresentation(profileImg.image!){
             if let uid = FIRAuth.auth()?.currentUser?.uid {
-                storageRef.child(uid).put(uploadData)
+//                storageRef.child(uid).put(uploadData)
                 storageRef.child(uid).child("profile.png").put(uploadData, metadata: nil, completion: { (metadata, error) in
                     if error != nil{
                         print(error)
                         return
                     }
+                    print("uid funciona \(uid)")
                     self.ref.child(uid).child("photo").setValue(metadata?.downloadURL()?.absoluteString)
                 })
             }

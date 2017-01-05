@@ -13,7 +13,7 @@ import Firebase
 import FirebaseDatabase
 import GeoFire
 
-class MapViewController: UIViewController,MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewControllerDelegate {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     @IBOutlet weak var Map: MKMapView!
@@ -30,6 +30,7 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         
         if self.revealViewController() != nil {
             menuBtn.target = self.revealViewController()
+            self.revealViewController().delegate = self
             menuBtn.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }

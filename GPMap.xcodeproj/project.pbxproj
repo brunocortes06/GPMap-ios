@@ -10,6 +10,7 @@
 		721D260A57312D622B89EC29 /* Pods_GPMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1C45543AF50C5210198C5 /* Pods_GPMap.framework */; };
 		9A05256F1E1407EE001428B7 /* ProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */; };
 		9A0525731E14429B001428B7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0525721E14429B001428B7 /* Extensions.swift */; };
+		9A0E65221E1D5CC10080267E /* ProfileHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */; };
 		9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A632F931E0867BF00A23309 /* MapViewController.swift */; };
 		9A632F961E08680F00A23309 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A632F951E08680F00A23309 /* GoogleService-Info.plist */; };
 		9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A767EBA1E0344E800C17C75 /* AppDelegate.swift */; };
@@ -24,10 +25,13 @@
 		9AADE54F1E087FD40009D5D8 /* GFGeoHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE5461E087FD40009D5D8 /* GFGeoHash.m */; };
 		9AADE5501E087FD40009D5D8 /* GFGeoHashQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE5481E087FD40009D5D8 /* GFGeoHashQuery.m */; };
 		9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE54A1E087FD40009D5D8 /* GFQuery.m */; };
+		9AB3C0D51E14A81F00218D0A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */; };
+		9ACCA6AB1E1C93D500177310 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACCA6AA1E1C93D500177310 /* ProfileViewController.swift */; };
 		9AD33ACC1E12BF8000053DB9 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD33ACB1E12BF8000053DB9 /* SWRevealViewController.m */; };
 		9ADCA0A41E1308A00054C684 /* menu2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ADCA0A31E1308A00054C684 /* menu2.png */; };
 		9ADCA0A61E1309F00054C684 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADCA0A51E1309F00054C684 /* MenuViewController.swift */; };
 		9ADCA0A81E130A130054C684 /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADCA0A71E130A130054C684 /* MenuTableViewCell.swift */; };
+		9AE490811E1B52A30033B73F /* CompleteRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE490801E1B52A30033B73F /* CompleteRegisterViewController.swift */; };
 		9AF071761E11CB8500F29598 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071701E11CB8500F29598 /* AnnotationView.swift */; };
 		9AF071771E11CB8500F29598 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071711E11CB8500F29598 /* CustomAnnotation.swift */; };
 		9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF071721E11CB8500F29598 /* CustomCalloutView.swift */; };
@@ -58,6 +62,7 @@
 		7EA1C45543AF50C5210198C5 /* Pods_GPMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GPMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePhotoViewController.swift; sourceTree = "<group>"; };
 		9A0525721E14429B001428B7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHandlers.swift; sourceTree = "<group>"; };
 		9A632F931E0867BF00A23309 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		9A632F951E08680F00A23309 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9A767EB71E0344E800C17C75 /* GPMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,12 +93,15 @@
 		9AADE54A1E087FD40009D5D8 /* GFQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GFQuery.m; sourceTree = "<group>"; };
 		9AADE54B1E087FD40009D5D8 /* GFQuery+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GFQuery+Private.h"; sourceTree = "<group>"; };
 		9AADE54C1E087FD40009D5D8 /* GFRegionQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFRegionQuery.h; sourceTree = "<group>"; };
+		9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9ACCA6AA1E1C93D500177310 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9AD33ACA1E12BF8000053DB9 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		9AD33ACB1E12BF8000053DB9 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		9AD33ACD1E12C01A00053DB9 /* SidebarMenu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SidebarMenu-Bridging-Header.h"; sourceTree = "<group>"; };
 		9ADCA0A31E1308A00054C684 /* menu2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu2.png; sourceTree = "<group>"; };
 		9ADCA0A51E1309F00054C684 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		9ADCA0A71E130A130054C684 /* MenuTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		9AE490801E1B52A30033B73F /* CompleteRegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteRegisterViewController.swift; sourceTree = "<group>"; };
 		9AF071701E11CB8500F29598 /* AnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		9AF071711E11CB8500F29598 /* CustomAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 		9AF071721E11CB8500F29598 /* CustomCalloutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCalloutView.swift; sourceTree = "<group>"; };
@@ -144,8 +152,11 @@
 		9A05256A1E1406BF001428B7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9AE490801E1B52A30033B73F /* CompleteRegisterViewController.swift */,
 				9A632F931E0867BF00A23309 /* MapViewController.swift */,
+				9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */,
 				9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */,
+				9ACCA6AA1E1C93D500177310 /* ProfileViewController.swift */,
 				9A767EBC1E0344E800C17C75 /* ViewController.swift */,
 			);
 			name = ViewControllers;
@@ -162,7 +173,6 @@
 		9A05256C1E140702001428B7 /* Annotation */ = {
 			isa = PBXGroup;
 			children = (
-				9AADE53D1E087FB50009D5D8 /* Geofire */,
 				9AF071701E11CB8500F29598 /* AnnotationView.swift */,
 				9AF071711E11CB8500F29598 /* CustomAnnotation.swift */,
 				9AF071721E11CB8500F29598 /* CustomCalloutView.swift */,
@@ -186,6 +196,14 @@
 				9A0525721E14429B001428B7 /* Extensions.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		9A0E65201E1D5CA30080267E /* Handler */ = {
+			isa = PBXGroup;
+			children = (
+				9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */,
+			);
+			name = Handler;
 			sourceTree = "<group>";
 		};
 		9A767EAE1E0344E700C17C75 = {
@@ -213,8 +231,10 @@
 		9A767EB91E0344E800C17C75 /* GPMap */ = {
 			isa = PBXGroup;
 			children = (
-				9A0525711E144283001428B7 /* Utils */,
+				9A0E65201E1D5CA30080267E /* Handler */,
 				9A05256C1E140702001428B7 /* Annotation */,
+				9AADE53D1E087FB50009D5D8 /* Geofire */,
+				9A0525711E144283001428B7 /* Utils */,
 				9A05256D1E14072E001428B7 /* Menu */,
 				9A05256B1E1406EB001428B7 /* Model */,
 				9A05256A1E1406BF001428B7 /* ViewControllers */,
@@ -490,6 +510,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AE490811E1B52A30033B73F /* CompleteRegisterViewController.swift in Sources */,
+				9AB3C0D51E14A81F00218D0A /* LoginViewController.swift in Sources */,
 				9AD33ACC1E12BF8000053DB9 /* SWRevealViewController.m in Sources */,
 				9A767EBD1E0344E800C17C75 /* ViewController.swift in Sources */,
 				9AF071761E11CB8500F29598 /* AnnotationView.swift in Sources */,
@@ -497,6 +519,7 @@
 				9AADE54E1E087FD40009D5D8 /* GFBase32Utils.m in Sources */,
 				9AADE5501E087FD40009D5D8 /* GFGeoHashQuery.m in Sources */,
 				9AADE54D1E087FD40009D5D8 /* GeoFire.m in Sources */,
+				9A0E65221E1D5CC10080267E /* ProfileHandlers.swift in Sources */,
 				9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */,
 				9AADE54F1E087FD40009D5D8 /* GFGeoHash.m in Sources */,
 				9AF071771E11CB8500F29598 /* CustomAnnotation.swift in Sources */,
@@ -505,6 +528,7 @@
 				9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */,
 				9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */,
 				9A0525731E14429B001428B7 /* Extensions.swift in Sources */,
+				9ACCA6AB1E1C93D500177310 /* ProfileViewController.swift in Sources */,
 				9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */,
 				9ADCA0A81E130A130054C684 /* MenuTableViewCell.swift in Sources */,
 			);

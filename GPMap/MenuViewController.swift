@@ -24,6 +24,21 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     var uid:String = ""
     var ref = FIRDatabase.database().reference()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.revealViewController().view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.revealViewController().frontViewController.revealViewController().tapGestureRecognizer()
+        self.revealViewController().frontViewController.view.isUserInteractionEnabled = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.revealViewController().frontViewController.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.revealViewController().frontViewController.view.isUserInteractionEnabled = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,7 +55,8 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.locationManager.requestLocation()
         }
         
-        menuNameArr = ["Mapa","Carregar foto", "Sair"]
+        menuNameArr = ["Perfil", "Mapa", "Sair"] //"Carregar foto"
+        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "exit_icon")!]
     }
     
     
@@ -50,7 +66,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MenuTableViewCell") as! MenuTableViewCell
-        //        cell.imgIcon.image = iconeImage[indexPath.row]
+        cell.imgIcon.image = iconeImage[indexPath.row]
         cell.lblMenuName.text! = menuNameArr[indexPath.row]
         return cell
     }
@@ -61,10 +77,10 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         if cell.lblMenuName.text == "Sair"{
             let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let desController = mainStoryboard.instantiateViewController(withIdentifier: "LoginViewController") as! ViewController
-            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+            let desController = mainStoryboard.instantiateViewController(withIdentifier: "MasterLoginViewController") as! LoginViewController
+//            let newFrontViewController = UINavigationController.init(rootViewController:desController)
             try! FIRAuth.auth()?.signOut()
-            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+            revealViewCOntroller.pushFrontViewController(desController, animated: true)
         }
         
         if cell.lblMenuName.text == "Mapa"{
@@ -85,9 +101,16 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         
-        if cell.lblMenuName.text == "Carregar foto"{
+//        if cell.lblMenuName.text == "Carregar foto"{
+//            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfilePhotoViewController") as! ProfilePhotoViewController
+//            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+//            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+//        }
+        
+        if cell.lblMenuName.text == "Perfil"{
             let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfilePhotoViewController") as! ProfilePhotoViewController
+            let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
             let newFrontViewController = UINavigationController.init(rootViewController:desController)
             revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
         }
