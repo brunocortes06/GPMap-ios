@@ -21,22 +21,21 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     var long:Double = 0.0
     var lat:Double = 0.0
     let locationManager = CLLocationManager()
-    var uid:String = ""
+    var logout:Bool = false
     
     var ref: FIRDatabaseReference!
-
     
     let loadLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.textColor = UIColor.white
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.isHidden = true
+        label.textAlignment = NSTextAlignment.center
+        label.text = "Aguarde determinando localização"
+        label.translatesAutoresizingMaskIntoConstraints = false
+
         return label
     }()
-    
-//    let scrollView: UIScrollView = {
-//        let scroll = UIScrollView(frame: UIScreen.main.bounds)
-//        scroll.isScrollEnabled = true
-//        return scroll
-//    }()
     
     let logoImg: UIImageView = {
         let img = UIImageView()
@@ -168,12 +167,16 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                 FIRAuth.auth()?.signIn(withEmail: emailTextField.text!, password: passwordTextField.text!, completion: { (user, error) in
                     if error == nil {
                         
+                        if(self.lat == 0.0){
+                            self.locationManager.requestLocation()
+                        }else{
                         // set da coordenada
                         let coord = CLLocation(latitude: self.lat, longitude: self.long)
                         
                         self.setLocation(coord: coord)
                         
                         self.performSegue(withIdentifier: "ShowMap1", sender: self)
+                        }
                     }else{
                         let alertcontroller = UIAlertController(title: "Erro", message: error?.localizedDescription , preferredStyle: .alert)
                         let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
@@ -190,11 +193,9 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         }else{
             FIRAuth.auth()?.createUser(withEmail: emailTextField.text!, password: passwordTextField.text!, completion: { (user, error) in
                 if error == nil {
-                    self.uid = (FIRAuth.auth()?.currentUser?.uid)!
                     let user = User.init(name: self.nameTextField.text!, age: String(self.age), gender: self.gender, hair: "", skin: "", tel: "", description: "", photo: "")
                     self.ref = FIRDatabase.database().reference()
-//                    print("users \(user.toAnyObject())")
-                    self.ref.child("users").child(self.uid).updateChildValues(user.toAnyObject())
+                    self.ref.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues(user.toAnyObject())
                     
                     // set da coordenada
                     let coord = CLLocation(latitude: self.lat, longitude: self.long)
@@ -223,11 +224,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         if(FIRAuth.auth()?.currentUser?.uid != nil){
             let geofireRef = FIRDatabase.database().reference().child("locations")
             let geoFire = GeoFire(firebaseRef: geofireRef)
-            //            print(FIRAuth.auth()?.currentUser?.uid as Any)
-            //            print(coord)
             geoFire?.setLocation(coord, forKey: FIRAuth.auth()?.currentUser?.uid)
         }
-        //print("setGeoFire = \(coord) \(coord.coordinate.latitude) \(coord.coordinate.longitude)")
     }
     
     func datePickerValueChanged(_ sender: UIDatePicker){
@@ -281,12 +279,6 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         
     }
     
-    override func viewDidLayoutSubviews(){
-
-//        self.scrollView.contentSize = CGSize(width: self.scrollView.contentSize.width, height: self.scrollView.contentSize.height)//900
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -298,6 +290,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         view.addSubview(genderControl)
         view.addSubview(datePicker)
         view.addSubview(logoImg)
+        view.addSubview(loadLabel)
 
         setInputsContainerView()
         setLoginRegisterControl()
@@ -310,15 +303,25 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.requestLocation()
             if ((FIRAuth.auth()?.currentUser) != nil){
-                uid = (FIRAuth.auth()?.currentUser?.uid)!
-                inputsContainerView.isHidden = true
-                loginRegisterControl.isHidden = true
-                genderControl.isHidden = true
-                datePicker.isHidden = true
-                loginRegisterButton.isHidden = true
-                loadLabel.text = "Aguarde, determinando localização"
+                loadingLogin()
             }
         }
+    }
+    
+    func loadingLogin(){
+        // Se esta logado escondo os campos e centralizo o logo e texto pedindo para aguardar
+        inputsContainerView.isHidden = true
+        loginRegisterControl.isHidden = true
+        genderControl.isHidden = true
+        datePicker.isHidden = true
+        loginRegisterButton.isHidden = true
+        loadLabel.isHidden = false
+        
+        loadLabelTopAnchor = loadLabel.topAnchor.constraint(equalTo: logoImg.bottomAnchor, constant: 12 )
+        loginButtonTopAnchor?.isActive = true
+        
+        logoImgYAnchor = logoImg.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: -12 )
+        logoImgYAnchor?.isActive = true
     }
     
     func setLoginRegisterControl(){
@@ -344,6 +347,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     var nameTextFieldHeightAnchor: NSLayoutConstraint?
     var passwordTextFieldHeightAnchor: NSLayoutConstraint?
     var loginButtonTopAnchor: NSLayoutConstraint?
+    var loadLabelTopAnchor: NSLayoutConstraint?
+    var logoImgYAnchor: NSLayoutConstraint?
     
     func setInputsContainerView(){
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -353,7 +358,13 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         inputsContainerViewHeightAnchor?.isActive = true
         
         logoImg.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoImg.bottomAnchor.constraint(equalTo: loginRegisterControl.topAnchor, constant: -12).isActive = true
+        logoImgYAnchor = logoImg.bottomAnchor.constraint(equalTo: loginRegisterControl.topAnchor, constant: -12)
+            logoImgYAnchor?.isActive = true
+        
+        loadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loadLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -12).isActive = true
+        loadLabelTopAnchor = loadLabel.topAnchor.constraint(equalTo: logoImg.bottomAnchor, constant: 12)
+            loadLabelTopAnchor?.isActive = true
         
         loginRegisterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButtonTopAnchor = loginRegisterButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 12)
@@ -414,19 +425,15 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         lat = manager.location!.coordinate.latitude
         long = manager.location!.coordinate.longitude
         
-        locationManager.stopUpdatingLocation()
+        print("\(lat) \(long)")
+
         
         //Se ja pegou a loclizacao e ja esta logado, chamar proxima segue
-        if let user =  FIRAuth.auth()?.currentUser{
-            //            self.logoutBtn.alpha = 1.0
-            //            self.UserLabel.text = user.email
-            uid = (FIRAuth.auth()?.currentUser?.uid)!
+        if (FIRAuth.auth()?.currentUser) != nil{
+            locationManager.stopUpdatingLocation()
             // set da coordenada
             setLocation(coord: manager.location!)
             self.performSegue(withIdentifier: "ShowMap1", sender: self)
-        }else{
-            //            self.logoutBtn.alpha = 0.0
-            //            self.UserLabel.text = ""
         }
     }
     
@@ -447,7 +454,6 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         let navigationController = UINavigationController(rootViewController: destinationController)
         
         sw.pushFrontViewController(navigationController, animated: true)
-        destinationController.uid = uid
         destinationController.lat = lat
         destinationController.long = long
         

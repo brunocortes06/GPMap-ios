@@ -18,12 +18,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     @IBOutlet weak var Map: MKMapView!
     
-//    var userHash = [String: User]()
+    //    var userHash = [String: User]()
     let noPhoto:String = "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac"
-    var uid:String = ""
+    var uid:String = (FIRAuth.auth()?.currentUser?.uid)!
     var lat:Double = 0.0
     var long:Double = 0.0
+    var userGender:String = ""
     var ref = FIRDatabase.database().reference()
+//    var i:CLong = 0
+    var userSnap = FIRDataSnapshot()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,15 +38,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
-        // Do any additional setup after loading the view.
-        
+        //Definir genero do usuario para filtrar pesquisas e selecionar icone da annotation do mapa
+        getCurrentUserGender()
         
         let geoFire = GeoFire(firebaseRef: ref.child("locations"))
         
         let center = CLLocation(latitude: lat, longitude: long)
         // Query locations with a radius of 100 km
-//        print("center \(center)")
-        let circleQuery = geoFire?.query(at: center, withRadius: 100)
+        let circleQuery = geoFire?.query(at: center, withRadius: 1000)
         
         
         circleQuery?.observe(.keyEntered, with: { (key: String?, location: CLLocation?) in
@@ -55,26 +57,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
         })
         
         let location = CLLocationCoordinate2DMake(lat, long)
-
+        
         self.Map.delegate = self
-        let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
+//        let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
         
         //Carregar foto de perfil
-        let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac")
-        let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-        point.image = UIImage(data: data!)
-//        point.image = UIImage(named: "girl-pin.png")
-        point.name = "teste"
-        point.address = "adress"
-        point.phone = "phone"
-        
+        //        let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac")
+        //        let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+        //        point.image = UIImage(data: data!)
+        ////        point.image = UIImage(named: "girl-pin.png")
+        //        point.name = "teste"
+        //        point.address = "adress"
+        //        point.phone = "phone"
+        //
         let span = MKCoordinateSpanMake(0.09, 0.09)
         
         let region = MKCoordinateRegion(center: location, span: span)
         
         Map.setRegion(region, animated: true)
         
-        Map.addAnnotation(point)
+//        Map.addAnnotation(point)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -89,10 +91,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
         }else{
             annotationView?.annotation = annotation
         }
-//        annotationView?.image = UIImage(named: "girl-pin")
+        //        annotationView?.image = UIImage(named: "girl-pin")
         
         // Resize Pin image
-        let pinImage = UIImage(named: "girl-pin")
+        //        let pinImage = UIImage(named: "girl-pin")
+        
+        
+        var pinImage = UIImage(named: "girl-pin")
+        if(self.userGender == "Feminino"){
+            pinImage = UIImage(named: "boy_pin")
+        }
+        
+        
+        //        let pinImage = UIImage(named: "boy_pin")
         let size = CGSize(width: 50, height: 50)
         UIGraphicsBeginImageContext(size)
         let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
@@ -150,50 +161,64 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
         
     }
     
-    func getUserData(key: String, location: CLLocation) /*-> Dictionary<String, User> */{
+    func getUserData(key: String, location: CLLocation){
         ref.child("users").child(key).observe(.value, with: { (snapshot) in
-
+//            self.i = self.i + 1
+//            print("key \(self.i) \(key)")
             let user = User(snapShot: snapshot)
-//            self.userHash[key] = user
             
-            if(user.name != ""){
-                var url = URL(string: "")
-                if(user.photo != ""){
-                    url = URL(string: user.photo)
-                }else{
-                    url = URL(string: self.noPhoto)
+            //Filtrar para homens verem mulheres e vice-versa
+            let gender = (snapshot.value as? NSDictionary)?["gender"] as? String ?? ""
+            if((self.userGender == "Masculino" && gender == "Feminino") || (self.userGender == "Feminino" && gender == "Masculino")){
+                
+                self.userSnap = snapshot
+                if(user.name != ""){
+                    var url = URL(string: "")
+                    if(user.photo != ""){
+                        url = URL(string: user.photo)
+                    }else{
+                        url = URL(string: self.noPhoto)
+                    }
+                    
+                    
+                    //                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+                    let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude ))
+                    
+                    //Carrego a imagem do cache
+                    point.loadImgUsingCache(url: url!)
+                    
+                    let userLocation = CLLocation(latitude: self.lat, longitude: self.long)
+                    let otherUser = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                    
+                    
+                    let distanceInKm = (userLocation.distance(from: otherUser))/1000 // result is in meters
+                    point.name = user.name
+                    point.address = "Distância: \(round(distanceInKm)) Km"
+                    point.phone = "Telefone: \(user.tel)"
+                    
+                    self.Map.addAnnotation(point)
+                    //            }else{
+                    //                print("key \(key)")
                 }
-                
-
-//                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude ))
-                
-                //Carrego a imagem do cache
-                point.loadImgUsingCache(url: url!)
-                
-                let userLocation = CLLocation(latitude: self.lat, longitude: self.long)
-                let otherUser = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                
-                
-                let distanceInKm = (userLocation.distance(from: otherUser))/1000 // result is in meters
-                point.name = user.name
-                point.address = "Distância: \(round(distanceInKm)) Km"
-                point.phone = user.tel
-
-                self.Map.addAnnotation(point)
-//            }else{
-//                print("key \(key)")
             }
             
         })
     }
+    
+    func getCurrentUserGender(){
+        ref.child("users").child(uid).child("gender").observeSingleEvent(of: .value, with: { (snapshot) in
+            self.userGender = snapshot.value as! String
+        })
+    }
+    
+    
     
     func callPhoneNumber(sender: UIButton)
     {
         let v = sender.superview as! CustomCalloutView
         if let url = URL(string: "telprompt://\(v.starbucksPhone.text!)"), UIApplication.shared.canOpenURL(url)
         {
-//            UIApplication.shared.openURL( url)
+            //            UIApplication.shared.openURL( url)
             let options = [UIApplicationOpenURLOptionUniversalLinksOnly : true]
             UIApplication.shared.open(url, options: options, completionHandler: nil)
         }

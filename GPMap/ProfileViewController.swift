@@ -83,7 +83,7 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         view.layer.borderWidth = 1
         view.placeholderText = "Descrição"
         view.text = "Descricao..."
-//        view.textColor = UIColor.lightGray
+        //        view.textColor = UIColor.lightGray
         view.font = UIFont.systemFont(ofSize: 18)
         view.layer.borderColor = UIColor.black.cgColor
         view.isEditable = true
@@ -111,13 +111,14 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         profileImg.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleProfileImgView))
         profileImg.addGestureRecognizer(tapRecognizer)
-
+        
         
         self.uid = (FIRAuth.auth()?.currentUser?.uid)!
         
         ageTextField.isEnabled = false
         nameTextField.isEnabled = false
         descTextView.isEditable = false
+        telTextField.isEnabled = false
         
         descTextView.delegate = self
         
@@ -133,10 +134,10 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         setProfileImgView()
         
         getProfilePhoto(uid:uid)
-
+        
     }
     
-
+    
     func setInputsContainerView(){
         
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -217,40 +218,60 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
                 self.descTextView.text = user.description
             }
             
-                var url = URL(string: "")
-                if(user.photo != ""){
-                    url = URL(string: user.photo)
-                     self.profileImg.loadImgUsingCache(url: url!)
-                }
+            if(!user.tel.isEmpty){
+                self.telTextField.text = user.tel
+            }
+            
+            var url = URL(string: "")
+            if(user.photo != ""){
+                url = URL(string: user.photo)
+                self.profileImg.loadImgUsingCache(url: url!)
+            }
             
         })
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        descTextView.text = ""
+        if(descTextView.text == "Descricao..."){
+            descTextView.text = ""
+        }
     }
     
     func handleEditSaveAction(){
         ageTextField.isEnabled = true
         nameTextField.isEnabled = true
         descTextView.isEditable = true
+        telTextField.isEnabled = true
         
-        editButton.setTitle("Salvar", for: .normal)
-        
-        if(ageTextField.text == "" || nameTextField.text == "" || descTextView.text == "Descricao..."){
-            let alertcontroller = UIAlertController(title: "Erro", message: "Preencha os campos antes de salvar", preferredStyle: .alert)
-            let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            alertcontroller.addAction(defaultAction)
-            self.present(alertcontroller, animated: true, completion: nil)
+        if (editButton.currentTitle == "Salvar"){
+            if(ageTextField.text == "" || nameTextField.text == "" || descTextView.text == "Descricao..." || telTextField.text == ""){
+                let alertcontroller = UIAlertController(title: "Erro", message: "Preencha os campos antes de salvar", preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                alertcontroller.addAction(defaultAction)
+                self.present(alertcontroller, animated: true, completion: nil)
+            }else{
+                //sets
+                var user = User(snapShot: self.userSnap)
+                user.age = self.ageTextField.text!
+                user.name = self.nameTextField.text!
+                user.description = self.descTextView.text!
+                user.tel = self.telTextField.text!
+                self.ref.child("users").child(uid).updateChildValues(user.toAnyObject())
+                
+                ageTextField.isEnabled = false
+                nameTextField.isEnabled = false
+                descTextView.isEditable = false
+                telTextField.isEnabled = false
+                editButton.setTitle("Editar", for: .normal)
+                
+                let alertcontroller = UIAlertController(title: "Sucesso", message: "Perfil atualizado!", preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                alertcontroller.addAction(defaultAction)
+                self.present(alertcontroller, animated: true, completion: nil)
+            }
         }else{
-            //sets
-            var user = User(snapShot: self.userSnap)
-            user.age = self.ageTextField.text!
-            user.name = self.nameTextField.text!
-            user.description = self.descTextView.text!
-            self.ref.child("users").child(uid).updateChildValues(user.toAnyObject())
+            editButton.setTitle("Salvar", for: .normal)
         }
-        
     }
     
     

@@ -81,6 +81,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
 //            let newFrontViewController = UINavigationController.init(rootViewController:desController)
             try! FIRAuth.auth()?.signOut()
             revealViewCOntroller.pushFrontViewController(desController, animated: true)
+            desController.logout = true
         }
         
         if cell.lblMenuName.text == "Mapa"{
