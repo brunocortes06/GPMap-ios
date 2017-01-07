@@ -425,9 +425,6 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         lat = manager.location!.coordinate.latitude
         long = manager.location!.coordinate.longitude
         
-        print("\(lat) \(long)")
-
-        
         //Se ja pegou a loclizacao e ja esta logado, chamar proxima segue
         if (FIRAuth.auth()?.currentUser) != nil{
             locationManager.stopUpdatingLocation()

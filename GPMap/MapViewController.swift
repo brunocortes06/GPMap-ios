@@ -13,7 +13,7 @@ import Firebase
 import FirebaseDatabase
 import GeoFire
 
-class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewControllerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SWRevealViewControllerDelegate {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     @IBOutlet weak var Map: MKMapView!
@@ -25,7 +25,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
     var long:Double = 0.0
     var userGender:String = ""
     var ref = FIRDatabase.database().reference()
-//    var i:CLong = 0
+    var pointUid:String = ""
     var userSnap = FIRDataSnapshot()
     
     override func viewDidLoad() {
@@ -116,8 +116,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
         return annotationView
     }
     
-    func mapView(_ mapView: MKMapView,
-                 didSelect view: MKAnnotationView)
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView)
     {
         // 1
         if view.annotation is MKUserLocation
@@ -138,11 +137,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
         calloutView.addSubview(button)
         
         calloutView.starbucksImage.image = customAnnotation.image
+        calloutView.starbucksImage.isUserInteractionEnabled = true
+        self.pointUid = customAnnotation.uid
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleProfileImgView))
+
+        calloutView.starbucksImage.addGestureRecognizer(tapRecognizer)
         
         calloutView.center = CGPoint(x: view.bounds.size.width / 2, y: -calloutView.bounds.size.height*0.52)
         view.addSubview(calloutView)
         mapView.setCenter((view.annotation?.coordinate)!, animated: true)
     }
+    
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         if view.isKind(of: AnnotationView.self)
         {
@@ -163,8 +168,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
     
     func getUserData(key: String, location: CLLocation){
         ref.child("users").child(key).observe(.value, with: { (snapshot) in
-//            self.i = self.i + 1
-//            print("key \(self.i) \(key)")
             let user = User(snapShot: snapshot)
             
             //Filtrar para homens verem mulheres e vice-versa
@@ -195,15 +198,27 @@ class MapViewController: UIViewController, MKMapViewDelegate, SWRevealViewContro
                     point.name = user.name
                     point.address = "Distância: \(round(distanceInKm)) Km"
                     point.phone = "Telefone: \(user.tel)"
+                    point.uid = key
                     
                     self.Map.addAnnotation(point)
-                    //            }else{
-                    //                print("key \(key)")
+
                 }
             }
             
         })
     }
+    
+    func handleProfileImgView(){
+        let revealViewCOntroller:SWRevealViewController = self.revealViewController()
+        let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
+        let newFrontViewController = UINavigationController.init(rootViewController:desController)
+        revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+        desController.viewdUserUid = self.pointUid
+        desController.lat = self.lat
+        desController.long = self.long
+    }
+    
     
     func getCurrentUserGender(){
         ref.child("users").child(uid).child("gender").observeSingleEvent(of: .value, with: { (snapshot) in

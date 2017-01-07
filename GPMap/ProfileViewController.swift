@@ -15,6 +15,9 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
     
     var ref = FIRDatabase.database().reference()
     var uid: String = ""
+    var viewdUserUid:String = ""
+    var long:Double = 0
+    var lat:Double = 0
     
     let profileImg = UIImageView()
     var userSnap = FIRDataSnapshot()
@@ -120,6 +123,9 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         descTextView.isEditable = false
         telTextField.isEnabled = false
         
+        if(!viewdUserUid.isEmpty){
+            editButton.setTitle("Voltar", for: .normal)        }
+        
         descTextView.delegate = self
         
         navigationController?.navigationBar.barTintColor = UIColor(red: 61/255, green: 91/255, blue: 151/255, alpha: 1)
@@ -200,7 +206,11 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
     }
     
     func getProfilePhoto(uid: String){
-        ref.child("users").child(uid).observe(.value, with: { (snapshot) in
+        var newUid = uid
+        if(!viewdUserUid.isEmpty){
+            newUid = viewdUserUid
+        }
+        ref.child("users").child(newUid).observe(.value, with: { (snapshot) in
             
             self.userSnap = snapshot
             
@@ -243,34 +253,45 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         descTextView.isEditable = true
         telTextField.isEnabled = true
         
-        if (editButton.currentTitle == "Salvar"){
-            if(ageTextField.text == "" || nameTextField.text == "" || descTextView.text == "Descricao..." || telTextField.text == ""){
-                let alertcontroller = UIAlertController(title: "Erro", message: "Preencha os campos antes de salvar", preferredStyle: .alert)
-                let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-                alertcontroller.addAction(defaultAction)
-                self.present(alertcontroller, animated: true, completion: nil)
+        if(viewdUserUid.isEmpty){
+            if (editButton.currentTitle == "Salvar"){
+                if(ageTextField.text == "" || nameTextField.text == "" || descTextView.text == "Descricao..." || telTextField.text == ""){
+                    let alertcontroller = UIAlertController(title: "Erro", message: "Preencha os campos antes de salvar", preferredStyle: .alert)
+                    let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                    alertcontroller.addAction(defaultAction)
+                    self.present(alertcontroller, animated: true, completion: nil)
+                }else{
+                    //sets
+                    var user = User(snapShot: self.userSnap)
+                    user.age = self.ageTextField.text!
+                    user.name = self.nameTextField.text!
+                    user.description = self.descTextView.text!
+                    user.tel = self.telTextField.text!
+                    self.ref.child("users").child(uid).updateChildValues(user.toAnyObject())
+                    
+                    ageTextField.isEnabled = false
+                    nameTextField.isEnabled = false
+                    descTextView.isEditable = false
+                    telTextField.isEnabled = false
+                    editButton.setTitle("Editar", for: .normal)
+                    
+                    let alertcontroller = UIAlertController(title: "Sucesso", message: "Perfil atualizado!", preferredStyle: .alert)
+                    let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                    alertcontroller.addAction(defaultAction)
+                    self.present(alertcontroller, animated: true, completion: nil)
+                }
             }else{
-                //sets
-                var user = User(snapShot: self.userSnap)
-                user.age = self.ageTextField.text!
-                user.name = self.nameTextField.text!
-                user.description = self.descTextView.text!
-                user.tel = self.telTextField.text!
-                self.ref.child("users").child(uid).updateChildValues(user.toAnyObject())
-                
-                ageTextField.isEnabled = false
-                nameTextField.isEnabled = false
-                descTextView.isEditable = false
-                telTextField.isEnabled = false
-                editButton.setTitle("Editar", for: .normal)
-                
-                let alertcontroller = UIAlertController(title: "Sucesso", message: "Perfil atualizado!", preferredStyle: .alert)
-                let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-                alertcontroller.addAction(defaultAction)
-                self.present(alertcontroller, animated: true, completion: nil)
+                editButton.setTitle("Salvar", for: .normal)
             }
         }else{
-            editButton.setTitle("Salvar", for: .normal)
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let desController = mainStoryboard.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+            let revealViewCOntroller:SWRevealViewController = self.revealViewController()
+            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+            desController.lat = self.lat
+            desController.long = self.long
+//            _ = navigationController?.popViewController(animated: true)
         }
     }
     
