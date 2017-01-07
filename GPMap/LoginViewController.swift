@@ -12,8 +12,9 @@ import FirebaseAuth
 import Firebase
 import FirebaseDatabase
 import GeoFire
+import FBSDKLoginKit
 
-class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, UITextFieldDelegate {
+class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, UITextFieldDelegate, FBSDKLoginButtonDelegate {
     
     var name:String = ""
     var age:String = ""
@@ -65,6 +66,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    let facebookLoginButton = FBSDKLoginButton()
     
     let nameTextField: UITextField = {
         let tf = UITextField()
@@ -291,7 +294,12 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         view.addSubview(datePicker)
         view.addSubview(logoImg)
         view.addSubview(loadLabel)
+        view.addSubview(facebookLoginButton)
+        
 
+        facebookLoginButton.translatesAutoresizingMaskIntoConstraints = false
+        facebookLoginButton.delegate = self
+        
         setInputsContainerView()
         setLoginRegisterControl()
         
@@ -307,6 +315,48 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
             }
         }
     }
+    
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!){
+        
+    }
+    
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        if error != nil{
+            print(error.localizedDescription)
+            return
+        }
+        print("Login com sucesso via facebook")
+        let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+        print(credential)
+        FIRAuth.auth()?.signIn(with: credential) { (user, error) in
+            if error == nil{
+                FBSDKGraphRequest(graphPath: "/me", parameters: ["fields":"name,birthday,gender"]).start {(connection, result,err) in
+                    if err != nil{
+                        print("falhou graph facebook")
+                        return
+                    }
+                    print(result)
+                }
+                
+                if(self.lat == 0.0){
+                    self.locationManager.requestLocation()
+                }else{
+                    // set da coordenada
+                    let coord = CLLocation(latitude: self.lat, longitude: self.long)
+                    
+                    self.setLocation(coord: coord)
+                    
+                    self.performSegue(withIdentifier: "ShowMap1", sender: self)
+                }
+            }else{
+                print(error)
+            }
+            
+        }
+
+    }
+    
+    
     
     func loadingLogin(){
         // Se esta logado escondo os campos e centralizo o logo e texto pedindo para aguardar
@@ -349,6 +399,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     var loginButtonTopAnchor: NSLayoutConstraint?
     var loadLabelTopAnchor: NSLayoutConstraint?
     var logoImgYAnchor: NSLayoutConstraint?
+    var facebookLoginButtonTopAnchor: NSLayoutConstraint?
+
     
     func setInputsContainerView(){
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -371,6 +423,12 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
             loginButtonTopAnchor?.isActive = true
         loginRegisterButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         loginRegisterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        facebookLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        facebookLoginButtonTopAnchor = facebookLoginButton.topAnchor.constraint(equalTo: loginRegisterButton.bottomAnchor, constant: 12)
+        facebookLoginButtonTopAnchor?.isActive = true
+        facebookLoginButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
+        facebookLoginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         inputsContainerView.addSubview(nameTextField)
         

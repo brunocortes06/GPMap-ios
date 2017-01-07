@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:mapstogpx20161227_145013.gpx">
-   </FileRef>
-   <FileRef
       location = "group:GPMap.xcodeproj">
    </FileRef>
    <FileRef

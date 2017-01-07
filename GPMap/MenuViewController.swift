@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import FirebaseAuth
 import FirebaseDatabase
+import FBSDKLoginKit
 
 class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
     
@@ -80,6 +81,8 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             let desController = mainStoryboard.instantiateViewController(withIdentifier: "MasterLoginViewController") as! LoginViewController
 //            let newFrontViewController = UINavigationController.init(rootViewController:desController)
             try! FIRAuth.auth()?.signOut()
+            let manager = FBSDKLoginManager()
+            manager.logOut()
             revealViewCOntroller.pushFrontViewController(desController, animated: true)
             desController.logout = true
         }

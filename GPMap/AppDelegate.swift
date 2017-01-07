@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import IQKeyboardManagerSwift
+import FBSDKCoreKit
 
 
 @UIApplicationMain
@@ -22,8 +23,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         
         IQKeyboardManager.sharedManager().enable = true
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         return true
+    }
+    
+    // [START new_delegate]
+    @available(iOS 9.0, *)
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+            // [END new_delegate]
+            return FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: [:])
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
