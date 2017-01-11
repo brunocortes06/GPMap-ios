@@ -56,8 +56,8 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.locationManager.requestLocation()
         }
         
-        menuNameArr = ["Perfil", "Mapa", "Sair"] //"Carregar foto"
-        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "exit_icon")!]
+        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Sair"] //"Carregar foto"
+        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "exit_icon")!]
     }
     
     
@@ -85,6 +85,14 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             manager.logOut()
             revealViewCOntroller.pushFrontViewController(desController, animated: true)
             desController.logout = true
+        }
+        
+        if cell.lblMenuName.text == "Mensagens"{
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let desController = mainStoryboard.instantiateViewController(withIdentifier: "MessagesController") as! MessagesController
+            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+            
+            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
         }
         
         if cell.lblMenuName.text == "Mapa"{

@@ -10,6 +10,8 @@
 		721D260A57312D622B89EC29 /* Pods_GPMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1C45543AF50C5210198C5 /* Pods_GPMap.framework */; };
 		9A05256F1E1407EE001428B7 /* ProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */; };
 		9A0525731E14429B001428B7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0525721E14429B001428B7 /* Extensions.swift */; };
+		9A0E554E1E268758007B209E /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E554D1E268758007B209E /* UserCell.swift */; };
+		9A0E55501E26C0EA007B209E /* ChatMesageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */; };
 		9A0E65221E1D5CC10080267E /* ProfileHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */; };
 		9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A632F931E0867BF00A23309 /* MapViewController.swift */; };
 		9A632F961E08680F00A23309 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A632F951E08680F00A23309 /* GoogleService-Info.plist */; };
@@ -26,6 +28,10 @@
 		9AADE5501E087FD40009D5D8 /* GFGeoHashQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE5481E087FD40009D5D8 /* GFGeoHashQuery.m */; };
 		9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE54A1E087FD40009D5D8 /* GFQuery.m */; };
 		9AB3C0D51E14A81F00218D0A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */; };
+		9AC24D6D1E253BC200EB0C00 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D6C1E253BC200EB0C00 /* ChatLogController.swift */; };
+		9AC24D6F1E25746E00EB0C00 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D6E1E25746E00EB0C00 /* MessagesController.swift */; };
+		9AC24D711E2574D500EB0C00 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D701E2574D500EB0C00 /* Message.swift */; };
+		9AC24D731E25751B00EB0C00 /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D721E25751B00EB0C00 /* NewMessageController.swift */; };
 		9ACCA6AB1E1C93D500177310 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACCA6AA1E1C93D500177310 /* ProfileViewController.swift */; };
 		9AD33ACC1E12BF8000053DB9 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD33ACB1E12BF8000053DB9 /* SWRevealViewController.m */; };
 		9ADCA0A41E1308A00054C684 /* menu2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ADCA0A31E1308A00054C684 /* menu2.png */; };
@@ -62,6 +68,8 @@
 		7EA1C45543AF50C5210198C5 /* Pods_GPMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GPMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePhotoViewController.swift; sourceTree = "<group>"; };
 		9A0525721E14429B001428B7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		9A0E554D1E268758007B209E /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMesageCell.swift; sourceTree = "<group>"; };
 		9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHandlers.swift; sourceTree = "<group>"; };
 		9A632F931E0867BF00A23309 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		9A632F951E08680F00A23309 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -95,6 +103,10 @@
 		9AADE54B1E087FD40009D5D8 /* GFQuery+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GFQuery+Private.h"; sourceTree = "<group>"; };
 		9AADE54C1E087FD40009D5D8 /* GFRegionQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFRegionQuery.h; sourceTree = "<group>"; };
 		9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9AC24D6C1E253BC200EB0C00 /* ChatLogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
+		9AC24D6E1E25746E00EB0C00 /* MessagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
+		9AC24D701E2574D500EB0C00 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		9AC24D721E25751B00EB0C00 /* NewMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
 		9ACCA6AA1E1C93D500177310 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9AD33ACA1E12BF8000053DB9 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		9AD33ACB1E12BF8000053DB9 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
@@ -141,6 +153,8 @@
 		9A0525691E14069B001428B7 /* SupportFiles */ = {
 			isa = PBXGroup;
 			children = (
+				9A767EBA1E0344E800C17C75 /* AppDelegate.swift */,
+				9A6BA0D51E2092790013B516 /* GPMap.entitlements */,
 				9AF071741E11CB8500F29598 /* girl-pin.png */,
 				9ADCA0A31E1308A00054C684 /* menu2.png */,
 				9A767EC11E0344E800C17C75 /* Assets.xcassets */,
@@ -159,6 +173,9 @@
 				9A05256E1E1407EE001428B7 /* ProfilePhotoViewController.swift */,
 				9ACCA6AA1E1C93D500177310 /* ProfileViewController.swift */,
 				9A767EBC1E0344E800C17C75 /* ViewController.swift */,
+				9AC24D6C1E253BC200EB0C00 /* ChatLogController.swift */,
+				9AC24D6E1E25746E00EB0C00 /* MessagesController.swift */,
+				9AC24D721E25751B00EB0C00 /* NewMessageController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -167,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				9AF071751E11CB8500F29598 /* User.swift */,
+				9AC24D701E2574D500EB0C00 /* Message.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -197,6 +215,15 @@
 				9A0525721E14429B001428B7 /* Extensions.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		9A0E554C1E26873A007B209E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9A0E554D1E268758007B209E /* UserCell.swift */,
+				9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		9A0E65201E1D5CA30080267E /* Handler */ = {
@@ -232,7 +259,7 @@
 		9A767EB91E0344E800C17C75 /* GPMap */ = {
 			isa = PBXGroup;
 			children = (
-				9A6BA0D51E2092790013B516 /* GPMap.entitlements */,
+				9A0E554C1E26873A007B209E /* View */,
 				9A0E65201E1D5CA30080267E /* Handler */,
 				9A05256C1E140702001428B7 /* Annotation */,
 				9AADE53D1E087FB50009D5D8 /* Geofire */,
@@ -242,7 +269,6 @@
 				9A05256A1E1406BF001428B7 /* ViewControllers */,
 				9A0525691E14069B001428B7 /* SupportFiles */,
 				9AD33ABD1E12BE8700053DB9 /* SWRevealViewController */,
-				9A767EBA1E0344E800C17C75 /* AppDelegate.swift */,
 				9A767EBE1E0344E800C17C75 /* Main.storyboard */,
 				9A767EC31E0344E800C17C75 /* LaunchScreen.storyboard */,
 			);
@@ -528,14 +554,20 @@
 				9AADE54D1E087FD40009D5D8 /* GeoFire.m in Sources */,
 				9A0E65221E1D5CC10080267E /* ProfileHandlers.swift in Sources */,
 				9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */,
+				9AC24D731E25751B00EB0C00 /* NewMessageController.swift in Sources */,
 				9AADE54F1E087FD40009D5D8 /* GFGeoHash.m in Sources */,
 				9AF071771E11CB8500F29598 /* CustomAnnotation.swift in Sources */,
+				9A0E55501E26C0EA007B209E /* ChatMesageCell.swift in Sources */,
+				9A0E554E1E268758007B209E /* UserCell.swift in Sources */,
 				9A05256F1E1407EE001428B7 /* ProfilePhotoViewController.swift in Sources */,
 				9AF0717B1E11CB8500F29598 /* User.swift in Sources */,
 				9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */,
+				9AC24D6D1E253BC200EB0C00 /* ChatLogController.swift in Sources */,
 				9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */,
 				9A0525731E14429B001428B7 /* Extensions.swift in Sources */,
+				9AC24D6F1E25746E00EB0C00 /* MessagesController.swift in Sources */,
 				9ACCA6AB1E1C93D500177310 /* ProfileViewController.swift in Sources */,
+				9AC24D711E2574D500EB0C00 /* Message.swift in Sources */,
 				9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */,
 				9ADCA0A81E130A130054C684 /* MenuTableViewCell.swift in Sources */,
 			);

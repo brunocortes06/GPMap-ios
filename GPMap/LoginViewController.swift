@@ -24,6 +24,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     let locationManager = CLLocationManager()
     var logout:Bool = false
     
+    var dict : [String : AnyObject]!
+    
     var ref: FIRDatabaseReference!
     
     let loadLabel: UILabel = {
@@ -34,7 +36,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         label.textAlignment = NSTextAlignment.center
         label.text = "Aguarde determinando localização"
         label.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return label
     }()
     
@@ -173,12 +175,12 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                         if(self.lat == 0.0){
                             self.locationManager.requestLocation()
                         }else{
-                        // set da coordenada
-                        let coord = CLLocation(latitude: self.lat, longitude: self.long)
-                        
-                        self.setLocation(coord: coord)
-                        
-                        self.performSegue(withIdentifier: "ShowMap1", sender: self)
+                            // set da coordenada
+                            let coord = CLLocation(latitude: self.lat, longitude: self.long)
+                            
+                            self.setLocation(coord: coord)
+                            
+                            self.performSegue(withIdentifier: "ShowMap1", sender: self)
                         }
                     }else{
                         let alertcontroller = UIAlertController(title: "Erro", message: error?.localizedDescription , preferredStyle: .alert)
@@ -196,7 +198,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         }else{
             FIRAuth.auth()?.createUser(withEmail: emailTextField.text!, password: passwordTextField.text!, completion: { (user, error) in
                 if error == nil {
-                    let user = User.init(name: self.nameTextField.text!, age: String(self.age), gender: self.gender, hair: "", skin: "", tel: "", description: "", photo: "")
+                    let user = User.init(id: (FIRAuth.auth()?.currentUser?.uid)!,name: self.nameTextField.text!, age: String(self.age), gender: self.gender, hair: "", skin: "", tel: "", description: "", photo: "")
                     self.ref = FIRDatabase.database().reference()
                     self.ref.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues(user.toAnyObject())
                     
@@ -296,7 +298,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         view.addSubview(loadLabel)
         view.addSubview(facebookLoginButton)
         
-
+        
         facebookLoginButton.translatesAutoresizingMaskIntoConstraints = false
         facebookLoginButton.delegate = self
         
@@ -335,9 +337,62 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                         print("falhou graph facebook")
                         return
                     }
-                    print(result)
+//                    print(result)
+                    
+                    let today = NSDate()
+                    let data:[String:AnyObject] = result as! [String : AnyObject]
+                    
+                    let dateOfBirth = data["birthday"]
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "MM/dd/yyyy"
+                    var myDate = dateFormatter.date(from: dateOfBirth as! String)!
+                    dateFormatter.dateFormat = "dd/MM/yyyy"
+                    let dateOfBirthFomatted = dateFormatter.string(from: myDate)
+                    myDate = dateFormatter.date(from: dateOfBirthFomatted)!
+
+                    let gregorian = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+                    if let age = gregorian.components([.year], from: myDate, to: today as Date, options: []).year {
+                        let ageInt = age
+                        self.age = String(ageInt)
+                    }
+                    
+                    let genderFacebook = data["gender"] as! String
+                    if(genderFacebook == "male"){
+                        self.gender = "Masculino"
+                    }else{
+                        self.gender = "Feminino"
+                    }
+                    //selecionar o usuario para atualizar dados sem sobrescrever
+                    self.ref = FIRDatabase.database().reference()
+                    self.ref.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
+                        let user = User(snapShot: snapshot)
+                        // Tratamento nome
+                        var name:String = ""
+                        if(!user.name.isEmpty){
+                            if( data["name"] as? String! != user.name ){
+                                name = user.name
+                            }else{
+                                name = (data["name"] as? String!)!
+                            }
+                        }
+                        
+                        // Tratamento idade
+                        var age:String = ""
+                        if(!user.age.isEmpty){
+                            if( self.age != user.age ){
+                                age = user.age
+                            }else{
+                                age = self.age
+                            }
+                        }
+                        let userInit = User.init(id: (FIRAuth.auth()?.currentUser?.uid)!,name: name, age: age, gender: self.gender, hair: user.hair, skin: user.skin, tel: user.tel, description: user.description, photo: user.photo)
+                        print(userInit.toAnyObject())
+                        self.ref.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues(userInit.toAnyObject())
+
+                    })
+                    
+
                 }
-                
                 if(self.lat == 0.0){
                     self.locationManager.requestLocation()
                 }else{
@@ -353,9 +408,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
             }
             
         }
-
+        
     }
-    
     
     
     func loadingLogin(){
@@ -400,7 +454,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     var loadLabelTopAnchor: NSLayoutConstraint?
     var logoImgYAnchor: NSLayoutConstraint?
     var facebookLoginButtonTopAnchor: NSLayoutConstraint?
-
+    
     
     func setInputsContainerView(){
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -411,16 +465,16 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         
         logoImg.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         logoImgYAnchor = logoImg.bottomAnchor.constraint(equalTo: loginRegisterControl.topAnchor, constant: -12)
-            logoImgYAnchor?.isActive = true
+        logoImgYAnchor?.isActive = true
         
         loadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loadLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -12).isActive = true
         loadLabelTopAnchor = loadLabel.topAnchor.constraint(equalTo: logoImg.bottomAnchor, constant: 12)
-            loadLabelTopAnchor?.isActive = true
+        loadLabelTopAnchor?.isActive = true
         
         loginRegisterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButtonTopAnchor = loginRegisterButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 12)
-            loginButtonTopAnchor?.isActive = true
+        loginButtonTopAnchor?.isActive = true
         loginRegisterButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         loginRegisterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         

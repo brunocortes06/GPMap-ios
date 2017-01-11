@@ -44,6 +44,20 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         return button
     }()
     
+    let startTextingButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor(red: 80/255, green: 101/255, blue: 161/255, alpha: 1)
+        button.setTitle("Conversar", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.layer.cornerRadius = 5
+        button.layer.masksToBounds = true
+        button.isHidden = true
+        button.addTarget(self, action: #selector(handleTextingAction), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     let nameTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Nome"
@@ -124,7 +138,9 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         telTextField.isEnabled = false
         
         if(!viewdUserUid.isEmpty){
-            editButton.setTitle("Voltar", for: .normal)        }
+            editButton.setTitle("Voltar", for: .normal)
+            startTextingButton.isHidden = false
+        }
         
         descTextView.delegate = self
         
@@ -135,6 +151,7 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         view.addSubview(editButton)
         view.addSubview(descTextView)
         view.addSubview(profileImg)
+        view.addSubview(startTextingButton)
         
         setInputsContainerView()
         setProfileImgView()
@@ -155,6 +172,11 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         editButton.topAnchor.constraint(equalTo: descTextView.bottomAnchor, constant: 12).isActive = true
         editButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        startTextingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startTextingButton.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 12).isActive = true
+        startTextingButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
+        startTextingButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         inputsContainerView.addSubview(nameTextField)
         
@@ -291,11 +313,21 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
             revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
             desController.lat = self.lat
             desController.long = self.long
-//            _ = navigationController?.popViewController(animated: true)
+            //            _ = navigationController?.popViewController(animated: true)
         }
     }
     
-    
+    func handleTextingAction(){
+        let revealViewController:SWRevealViewController = self.revealViewController()
+        let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let desController = mainStoryboard.instantiateViewController(withIdentifier: "ChatLogController") as! ChatLogController
+        let newFrontViewController = UINavigationController.init(rootViewController:desController)
+        
+        revealViewController.pushFrontViewController(newFrontViewController, animated: true)
+        var user = User(snapShot: self.userSnap)
+        user.id = self.viewdUserUid
+        desController.user = user
+    }
     
     
     

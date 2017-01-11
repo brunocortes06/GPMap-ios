@@ -12,6 +12,7 @@ import FirebaseDatabase
 
 struct User {
 //    User: NSObject {
+    var id: String
     var name: String
     var age: String
     var gender: String
@@ -21,7 +22,8 @@ struct User {
     var tel:String
     var photo:String
     
-    init(name: String, age: String, gender: String, hair: String, skin: String, tel: String, description: String, photo: String) {
+    init(id: String, name: String, age: String, gender: String, hair: String, skin: String, tel: String, description: String, photo: String) {
+        self.id = id
         self.name = name
         self.age = age
         self.gender = gender
@@ -33,6 +35,7 @@ struct User {
     }
     
     init(snapShot: FIRDataSnapshot){
+        self.id = (snapShot.value as? NSDictionary)?["id"] as? String ?? ""
         self.name = (snapShot.value as? NSDictionary)?["name"] as? String ?? ""
         self.age = (snapShot.value as? NSDictionary)?["age"] as? String ?? ""
         self.gender = (snapShot.value as? NSDictionary)?["gender"] as? String ?? ""
@@ -53,7 +56,7 @@ struct User {
     }
     
     func toAnyObject() -> [String: Any]{
-        return ["name": name, "age": age, "gender": gender, "description": description, "hair": hair, "skin": skin, "tel": tel, "photo": photo]
+        return ["id": id, "name": name, "age": age, "gender": gender, "description": description, "hair": hair, "skin": skin, "tel": tel, "photo": photo]
     }
     
 //    init() {
