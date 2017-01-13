@@ -534,20 +534,27 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        lat = manager.location!.coordinate.latitude
-        long = manager.location!.coordinate.longitude
-        
-        //Se ja pegou a loclizacao e ja esta logado, chamar proxima segue
-        if (FIRAuth.auth()?.currentUser) != nil{
-            locationManager.stopUpdatingLocation()
-            // set da coordenada
-            setLocation(coord: manager.location!)
-            self.performSegue(withIdentifier: "ShowMap1", sender: self)
+        // Verifico se achou a posicao, para entao nao dar exception
+        if ( manager.location != nil) {
+            lat = manager.location!.coordinate.latitude
+            long = manager.location!.coordinate.longitude
+            
+            //Se ja pegou a loclizacao e ja esta logado, chamar proxima segue
+            if (FIRAuth.auth()?.currentUser) != nil{
+                locationManager.stopUpdatingLocation()
+                // set da coordenada
+                setLocation(coord: manager.location!)
+                self.performSegue(withIdentifier: "ShowMap1", sender: self)
+            }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Error on locationManager \(error)")
+        let alertcontroller = UIAlertController(title: "Erro", message: "Falha ao determinar localização!", preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        alertcontroller.addAction(defaultAction)
+        self.present(alertcontroller, animated: true, completion: nil)
+        self.viewDidLoad()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

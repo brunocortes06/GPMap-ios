@@ -14,7 +14,6 @@
 		9A0E55501E26C0EA007B209E /* ChatMesageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */; };
 		9A0E65221E1D5CC10080267E /* ProfileHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */; };
 		9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A632F931E0867BF00A23309 /* MapViewController.swift */; };
-		9A632F961E08680F00A23309 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A632F951E08680F00A23309 /* GoogleService-Info.plist */; };
 		9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A767EBA1E0344E800C17C75 /* AppDelegate.swift */; };
 		9A767EBD1E0344E800C17C75 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A767EBC1E0344E800C17C75 /* ViewController.swift */; };
 		9A767EC01E0344E800C17C75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A767EBE1E0344E800C17C75 /* Main.storyboard */; };
@@ -28,6 +27,7 @@
 		9AADE5501E087FD40009D5D8 /* GFGeoHashQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE5481E087FD40009D5D8 /* GFGeoHashQuery.m */; };
 		9AADE5511E087FD40009D5D8 /* GFQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADE54A1E087FD40009D5D8 /* GFQuery.m */; };
 		9AB3C0D51E14A81F00218D0A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */; };
+		9AB5236D1E294D72006E2D5A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9AB5236C1E294D72006E2D5A /* GoogleService-Info.plist */; };
 		9AC24D6D1E253BC200EB0C00 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D6C1E253BC200EB0C00 /* ChatLogController.swift */; };
 		9AC24D6F1E25746E00EB0C00 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D6E1E25746E00EB0C00 /* MessagesController.swift */; };
 		9AC24D711E2574D500EB0C00 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC24D701E2574D500EB0C00 /* Message.swift */; };
@@ -72,7 +72,6 @@
 		9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMesageCell.swift; sourceTree = "<group>"; };
 		9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHandlers.swift; sourceTree = "<group>"; };
 		9A632F931E0867BF00A23309 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		9A632F951E08680F00A23309 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9A6BA0D51E2092790013B516 /* GPMap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GPMap.entitlements; sourceTree = "<group>"; };
 		9A767EB71E0344E800C17C75 /* GPMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A767EBA1E0344E800C17C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +102,7 @@
 		9AADE54B1E087FD40009D5D8 /* GFQuery+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GFQuery+Private.h"; sourceTree = "<group>"; };
 		9AADE54C1E087FD40009D5D8 /* GFRegionQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFRegionQuery.h; sourceTree = "<group>"; };
 		9AB3C0D41E14A81F00218D0A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9AB5236C1E294D72006E2D5A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9AC24D6C1E253BC200EB0C00 /* ChatLogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		9AC24D6E1E25746E00EB0C00 /* MessagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
 		9AC24D701E2574D500EB0C00 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 				9AF071741E11CB8500F29598 /* girl-pin.png */,
 				9ADCA0A31E1308A00054C684 /* menu2.png */,
 				9A767EC11E0344E800C17C75 /* Assets.xcassets */,
-				9A632F951E08680F00A23309 /* GoogleService-Info.plist */,
+				9AB5236C1E294D72006E2D5A /* GoogleService-Info.plist */,
 				9A767EC61E0344E800C17C75 /* Info.plist */,
 			);
 			name = SupportFiles;
@@ -418,7 +418,13 @@
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -466,11 +472,11 @@
 			files = (
 				9ADCA0A41E1308A00054C684 /* menu2.png in Resources */,
 				9A767EC51E0344E800C17C75 /* LaunchScreen.storyboard in Resources */,
-				9A632F961E08680F00A23309 /* GoogleService-Info.plist in Resources */,
 				9A767EC21E0344E800C17C75 /* Assets.xcassets in Resources */,
 				9AF0717A1E11CB8500F29598 /* girl-pin.png in Resources */,
 				9AF071791E11CB8500F29598 /* CustomCalloutView.xib in Resources */,
 				9A767EC01E0344E800C17C75 /* Main.storyboard in Resources */,
+				9AB5236D1E294D72006E2D5A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,6 +760,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GPMap/GPMap.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks/frameworks\"",
 					"\"${PODS_ROOT}/FirebaseAuth/Frameworks/frameworks\"",

@@ -25,17 +25,17 @@ class MessagesController: UITableViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        //        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         
-        let image = UIImage(named: "new_message_icon")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
+//        let image = UIImage(named: "new_message_icon")
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
         checkIfUserIsLoggedIn()
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
         
-//        observeMessages()
-//        observeUserMessages()
+        //        observeMessages()
+        //        observeUserMessages()
     }
     
     var messages = [Message]()
@@ -44,35 +44,44 @@ class MessagesController: UITableViewController {
     func observeUserMessages() {
         let ref = FIRDatabase.database().reference().child("user-messages").child((FIRAuth.auth()?.currentUser?.uid)!)
         ref.observe(.childAdded, with: { (snapshot) in
-            let messageId = snapshot.key
-            let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
+            let userId = snapshot.key
             
-            messagesReference.observeSingleEvent(of: .value, with: { (snapshot) in
-                if let dictionary = snapshot.value as? [String: AnyObject] {
-                    let message = Message()
+            FIRDatabase.database().reference().child("user-messages").child((FIRAuth.auth()?.currentUser?.uid)!).child(userId).observe(.childAdded, with: { (snapshot) in
+                
+                let messageId = snapshot.key
+                let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
+                
+                messagesReference.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let dictionary = snapshot.value as? [String: AnyObject] {
+                        let message = Message()
+                        
+                        message.setValuesForKeys(dictionary)
+                        //                self.messages.append(message)
+                        
+                        if let chatPartnerId = message.chatPartnerId() {
+                            self.messagesDictionary[chatPartnerId] = message
+                        }
+                        
+                        self.attemptReloadOfTable()
 
-                    message.setValuesForKeys(dictionary)
-                    //                self.messages.append(message)
-                    
-                    if let chatPartnerId = message.chatPartnerId() {
-                        self.messagesDictionary[chatPartnerId] = message
-                        self.messages = Array(self.messagesDictionary.values)
-                        self.messages.sort(by: { (message1, message2) -> Bool in
-                            return (message1.timestamp?.intValue)! > (message2.timestamp?.intValue)!
-                        })
                     }
-                    
-                    self.timer?.invalidate()
-                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-                   
-                }
+                }, withCancel: nil)
             }, withCancel: nil)
-            
         }, withCancel: nil)
     }
     var timer: Timer?
     
+    private func attemptReloadOfTable(){
+        self.timer?.invalidate()
+        self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+    }
+    
     func handleReloadTable() {
+        self.messages = Array(self.messagesDictionary.values)
+        self.messages.sort(by: { (message1, message2) -> Bool in
+            return (message1.timestamp?.intValue)! > (message2.timestamp?.intValue)!
+        })
+
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
@@ -84,7 +93,7 @@ class MessagesController: UITableViewController {
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message()
                 message.setValuesForKeys(dictionary)
-//                self.messages.append(message)
+                //                self.messages.append(message)
                 
                 if let toId = message.toId {
                     self.messagesDictionary[toId] = message
@@ -126,9 +135,9 @@ class MessagesController: UITableViewController {
         let ref = FIRDatabase.database().reference().child("users").child(chatPartnerId)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             
-//            guard let dictionary = snapshot.value as? [String: AnyObject] else {
-//                return
-//            }
+            //            guard let dictionary = snapshot.value as? [String: AnyObject] else {
+            //                return
+            //            }
             
             var user = User(snapShot: snapshot)
             user.id = chatPartnerId
@@ -142,10 +151,10 @@ class MessagesController: UITableViewController {
     }
     
     func handleNewMessage() {
-//        let newMessageController = NewMessageController()
-//        newMessageController.messagesController = self
-//        let navController = UINavigationController(rootViewController: newMessageController)
-//        present(navController, animated: true, completion: nil)
+        //        let newMessageController = NewMessageController()
+        //        newMessageController.messagesController = self
+        //        let navController = UINavigationController(rootViewController: newMessageController)
+        //        present(navController, animated: true, completion: nil)
         
         let revealViewCOntroller:SWRevealViewController = self.revealViewController()
         let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -171,13 +180,13 @@ class MessagesController: UITableViewController {
         
         FIRDatabase.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             
-//            if let dictionary = snapshot.value as? [String: AnyObject] {
-                //                self.navigationItem.title = dictionary["name"] as? String
-                
-                let user = User(snapShot:snapshot)
-//                user.setValuesForKeysWithDictionary(dictionary)
-                self.setupNavBarWithUser(user)
-//            }
+            //            if let dictionary = snapshot.value as? [String: AnyObject] {
+            //                self.navigationItem.title = dictionary["name"] as? String
+            
+            let user = User(snapShot:snapshot)
+            //                user.setValuesForKeysWithDictionary(dictionary)
+            self.setupNavBarWithUser(user)
+            //            }
             
         }, withCancel: nil)
     }
@@ -202,7 +211,7 @@ class MessagesController: UITableViewController {
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.layer.cornerRadius = 20
         profileImageView.clipsToBounds = true
-//        if let profileImageUrl = user.profileImageUrl {
+        //        if let profileImageUrl = user.profileImageUrl {
         var url = URL(string: "")
         if(user.photo != ""){
             url = URL(string: user.photo)
@@ -210,7 +219,7 @@ class MessagesController: UITableViewController {
             url = URL(string: self.noPhoto)
         }
         profileImageView.loadImgUsingCache(url: url!)
-//        }
+        //        }
         
         containerView.addSubview(profileImageView)
         
@@ -237,13 +246,13 @@ class MessagesController: UITableViewController {
         
         self.navigationItem.titleView = titleView
         
-//        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatController()))
+        //        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatController()))
     }
     
     func showChatControllerForUser(_ user: User) {
-//        let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
-//        chatLogController.user = user
-//        navigationController?.pushViewController(chatLogController, animated: true)
+        //        let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
+        //        chatLogController.user = user
+        //        navigationController?.pushViewController(chatLogController, animated: true)
         
         let revealViewCOntroller:SWRevealViewController = self.revealViewController()
         let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -252,20 +261,20 @@ class MessagesController: UITableViewController {
         desController.user = user
         
         revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
-
+        
     }
     
     func handleLogout() {
         
-//        do {
-//            try FIRAuth.auth()?.signOut()
-//        } catch let logoutError {
-//            print(logoutError)
-//        }
-//        
-//        let loginController = LoginController()
-//        loginController.messagesController = self
-//        present(loginController, animated: true, completion: nil)
+        //        do {
+        //            try FIRAuth.auth()?.signOut()
+        //        } catch let logoutError {
+        //            print(logoutError)
+        //        }
+        //        
+        //        let loginController = LoginController()
+        //        loginController.messagesController = self
+        //        present(loginController, animated: true, completion: nil)
     }
     
 }

@@ -169,12 +169,12 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         inputsContainerView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
         editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        editButton.topAnchor.constraint(equalTo: descTextView.bottomAnchor, constant: 12).isActive = true
+        editButton.topAnchor.constraint(equalTo: startTextingButton.bottomAnchor, constant: 12).isActive = true
         editButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         startTextingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        startTextingButton.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 12).isActive = true
+        startTextingButton.topAnchor.constraint(equalTo: descTextView.bottomAnchor, constant: 12).isActive = true
         startTextingButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         startTextingButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         

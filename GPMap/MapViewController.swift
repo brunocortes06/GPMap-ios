@@ -31,12 +31,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //        self.navigationItem.title = "GPmap"
+        
         if self.revealViewController() != nil {
             menuBtn.target = self.revealViewController()
             self.revealViewController().delegate = self
             menuBtn.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        
+        //Configurar a NavBar
+        fetchUserAndSetupNavBarTitle()
         
         //Definir genero do usuario para filtrar pesquisas e selecionar icone da annotation do mapa
         getCurrentUserGender()
@@ -59,7 +64,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         let location = CLLocationCoordinate2DMake(lat, long)
         
         self.Map.delegate = self
-//        let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
+        //        let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
         
         //Carregar foto de perfil
         //        let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac")
@@ -76,7 +81,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         
         Map.setRegion(region, animated: true)
         
-//        Map.addAnnotation(point)
+        //        Map.addAnnotation(point)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -140,7 +145,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         calloutView.starbucksImage.isUserInteractionEnabled = true
         self.pointUid = customAnnotation.uid
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleProfileImgView))
-
+        
         calloutView.starbucksImage.addGestureRecognizer(tapRecognizer)
         
         calloutView.center = CGPoint(x: view.bounds.size.width / 2, y: -calloutView.bounds.size.height*0.52)
@@ -201,7 +206,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
                     point.uid = key
                     
                     self.Map.addAnnotation(point)
-
+                    
                 }
             }
             
@@ -237,6 +242,73 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
             let options = [UIApplicationOpenURLOptionUniversalLinksOnly : true]
             UIApplication.shared.open(url, options: options, completionHandler: nil)
         }
+    }
+    
+    
+    
+    
+    
+    func fetchUserAndSetupNavBarTitle() {
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        
+        FIRDatabase.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            let user = User(snapShot:snapshot)
+            self.setupNavBarWithUser(user)
+        }, withCancel: nil)
+    }
+    
+    func setupNavBarWithUser(_ user: User) {
+        let titleView = UIView()
+        titleView.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+        //        titleView.backgroundColor = UIColor.redColor()
+        
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        titleView.addSubview(containerView)
+        
+        let profileImageView = UIImageView()
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.layer.cornerRadius = 20
+        profileImageView.clipsToBounds = true
+        //        if let profileImageUrl = user.profileImageUrl {
+        var url = URL(string: "")
+        if(user.photo != ""){
+            url = URL(string: user.photo)
+        }else{
+            url = URL(string: self.noPhoto)
+        }
+        profileImageView.loadImgUsingCache(url: url!)
+        //        }
+        
+        containerView.addSubview(profileImageView)
+        
+        //ios 9 constraint anchors
+        //need x,y,width,height anchors
+        profileImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        let nameLabel = UILabel()
+        
+        containerView.addSubview(nameLabel)
+        nameLabel.text = user.name
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        //need x,y,width,height anchors
+        nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8).isActive = true
+        nameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
+        nameLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        nameLabel.heightAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
+        
+        containerView.centerXAnchor.constraint(equalTo: titleView.centerXAnchor).isActive = true
+        containerView.centerYAnchor.constraint(equalTo: titleView.centerYAnchor).isActive = true
+        
+        self.navigationItem.titleView = titleView
+        
+        //        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatController()))
     }
     
 }

@@ -2,37 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>fb245483092537991</string>
-            </array>
-        </dict>
-    </array>
-    <key>FacebookAppID</key>
-    <string>245483092537991</string>
-    <key>FacebookDisplayName</key>
-    <string>GPMap</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>fbapi</string>
-        <string>fb-messenger-api</string>
-        <string>fbauth2</string>
-        <string>fbshareextension</string>
-    </array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>{human-readable reason for photo access}</string>
-    
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>AppName(GPMap)</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>AppName(GPMap)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -47,10 +18,41 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb245483092537991</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>3</string>
+	<key>FacebookAppID</key>
+	<string>245483092537991</string>
+	<key>FacebookDisplayName</key>
+	<string>GPMap</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>AppName(GPMap)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>AppName(GPMap)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload user profile photo</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
