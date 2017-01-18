@@ -14,6 +14,8 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     let cellId = "cellId"
     var messages = [Message]()
+    var hasBlocked = false
+    var wasBlocked = false
     
     var user: User? {
         didSet {
@@ -40,9 +42,9 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
-
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reportar", style: .plain, target: self, action: #selector(handleReport))
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleReport))
+        //        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleReport))
         
         collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
@@ -68,11 +70,11 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                 message.setValuesForKeys(dictionary!)
                 
                 self.messages.append(message)
-                    
+                
                 DispatchQueue.main.async(execute: {
                     self.collectionView?.reloadData()
                 })
-
+                
             }, withCancel: nil)
         }, withCancel: nil)
     }
@@ -194,22 +196,57 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let values = ["text": inputTextField.text!, "toId": toId, "fromId": fromId, "timestamp": timestamp] as [String : Any]
         //        childRef.updateChildValues(values)
         
+        let blockRef = FIRDatabase.database().reference().child("user-block").child((FIRAuth.auth()?.currentUser?.uid)!).child((user?.id)!)
+        blockRef.observe(.childAdded, with: { (snapshot) in
+            // Se achou o bloqueio retorna e nao cria a mensagem
+            let alertcontroller = UIAlertController(title: "Aviso", message: "Você bloqueou este usuário e/ou foi bloqueado", preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            alertcontroller.addAction(defaultAction)
+            self.present(alertcontroller, animated: true, completion: nil)
+            
+            if(!snapshot.key.isEmpty) {
+                self.hasBlocked = true
+            }
+        }, withCancel: nil)
+
         childRef.updateChildValues(values) { (error, ref) in
             if error != nil{
-                print(error)
+                print(error?.localizedDescription as Any)
+                return
+            }
+            //Aqui verifico se ele mesmo bloqueou
+            if self.hasBlocked == true {
                 return
             }
             
             self.inputTextField.text = nil
             
-            let userMessagesRef = FIRDatabase.database().reference().child("user-messages").child(fromId).child(toId)
-            let messageId = childRef.key
-            userMessagesRef.updateChildValues([messageId: 1])
+            //Verificar se ao inves de bloquear foi bloqueado, nesse caso, soh nao envio a mensagem
+            let blockRef = FIRDatabase.database().reference().child("user-block").child(toId).child(fromId)
+            blockRef.observe(.childAdded, with: { (snapshot) in
+                
+                if(!snapshot.key.isEmpty) {
+                   self.wasBlocked = true
+                }
+            }, withCancel: nil)
             
-            let recipientUserMessagesRef = FIRDatabase.database().reference().child("user-messages").child(toId).child(fromId)
-            recipientUserMessagesRef.updateChildValues([messageId: 1])
+            if (self.hasBlocked != true && self.wasBlocked != true) {
+                let userMessagesRef = FIRDatabase.database().reference().child("user-messages").child(fromId).child(toId)
+                let messageId = childRef.key
+                userMessagesRef.updateChildValues([messageId: 1])
+                
+                let recipientUserMessagesRef = FIRDatabase.database().reference().child("user-messages").child(toId).child(fromId)
+                recipientUserMessagesRef.updateChildValues([messageId: 1])
+            }
         }
     }
+    
+//    func checkUserBlocked() {
+//        let blockRef = FIRDatabase.database().reference().child("user-block").child((FIRAuth.auth()?.currentUser?.uid)!).child((user?.id)!)
+//        blockRef.observe(.childAdded, with: { (snapshot) in
+//            
+//        }, withCancel: nil)
+//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleSend()

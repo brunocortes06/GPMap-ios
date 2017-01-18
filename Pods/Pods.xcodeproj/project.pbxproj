@@ -240,8 +240,8 @@
 		987564B5D3CB86520614E00B79404DAC /* FBSDKMonotonicTime.h in Headers */ = {isa = PBXBuildFile; fileRef = 770D4FFC5C7F1C81F24F9D8D585B234D /* FBSDKMonotonicTime.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		989986EC0ACFB2CD119347871B4DE7CC /* FBSDKGameRequestContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 302A77F53F3A329CC0585985AA60803E /* FBSDKGameRequestContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98D0FD6F634DB222D25B918930B0A3C6 /* BFTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 9316D9CA48FCD2D07CD94BE7AE431E3F /* BFTask.m */; };
+		9A0210C21E2FC61400645D6E /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC75CE5B1E37E550F7953C73D866B7D4 /* FirebaseDatabase.framework */; };
 		9A4D6DEE8FC1423FB6D05A88690A8920 /* FBSDKLoginKit+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BD2416D9A4C271B8E703052BDC9EBF1 /* FBSDKLoginKit+Internal.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		9AB5236B1E29471B006E2D5A /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC75CE5B1E37E550F7953C73D866B7D4 /* FirebaseDatabase.framework */; };
 		9ACC24131A77C72D3CD18DF5B5542AD1 /* FBSDKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E2D3585F267A6DD6FDA3C28F23963ED /* FBSDKButton.m */; };
 		9B0D54DC78D209CFDB00542C9A7D8895 /* FBSDKGraphErrorRecoveryProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = F6D15024BE15048B7E5BFD1B1565C5B5 /* FBSDKGraphErrorRecoveryProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9BCDA5018A81DA38A04BDD58B1F6BEAF /* FBSDKGraphRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 043B2D7553468CA18827D73B32229918 /* FBSDKGraphRequest.m */; };
@@ -694,6 +694,7 @@
 		5270337715116768E52A83A4D25D0CE3 /* GeoFire+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GeoFire+Private.h"; path = "GeoFire/Implementation/GeoFire+Private.h"; sourceTree = "<group>"; };
 		52C4EB33F2A5084D28536719AA05A685 /* FBSDKShareOpenGraphAction.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSDKShareOpenGraphAction.m; path = FBSDKShareKit/FBSDKShareKit/FBSDKShareOpenGraphAction.m; sourceTree = "<group>"; };
 		52FFA91826E53A598998760A65077072 /* FBSDKMath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSDKMath.h; path = FBSDKCoreKit/FBSDKCoreKit/Internal/FBSDKMath.h; sourceTree = "<group>"; };
+		53E79344305F07F53BB9E696252F752D /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Frameworks/FirebaseCore.framework; sourceTree = "<group>"; };
 		5461DE6EF36D5A888AEF1354E9942CD4 /* BFTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BFTask.h; path = Bolts/Common/BFTask.h; sourceTree = "<group>"; };
 		54F7DEE40C074EB8311C7EFD25C3D123 /* FBSDKTriStateBOOL.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSDKTriStateBOOL.m; path = FBSDKCoreKit/FBSDKCoreKit/Internal/FBSDKTriStateBOOL.m; sourceTree = "<group>"; };
 		57B429F6D8FC0C978486416EE1B8388D /* FBSDKLikeObjectType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSDKLikeObjectType.m; path = FBSDKShareKit/FBSDKShareKit/FBSDKLikeObjectType.m; sourceTree = "<group>"; };
@@ -745,7 +746,6 @@
 		76CF5B3C3FA6615F9989888E201E6243 /* BFAppLinkTarget.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BFAppLinkTarget.h; path = Bolts/iOS/BFAppLinkTarget.h; sourceTree = "<group>"; };
 		76DA02D78072C03C86FD3D7C7AAA6E59 /* FBSDKURLOpening.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSDKURLOpening.h; path = FBSDKCoreKit/FBSDKCoreKit/Internal/BridgeAPI/FBSDKURLOpening.h; sourceTree = "<group>"; };
 		770D4FFC5C7F1C81F24F9D8D585B234D /* FBSDKMonotonicTime.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSDKMonotonicTime.h; path = FBSDKCoreKit/FBSDKCoreKit/Internal/FBSDKMonotonicTime.h; sourceTree = "<group>"; };
-		7751FDFA5D89ACA482F7E19F56C6D957 /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Frameworks/frameworks/FirebaseCore.framework; sourceTree = "<group>"; };
 		78455A2DC194B6871013DCF5F5B4A3FD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		78706592ED8E1F7E726A21954A6B8226 /* FBSDKShareVideo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSDKShareVideo.h; path = FBSDKShareKit/FBSDKShareKit/FBSDKShareVideo.h; sourceTree = "<group>"; };
 		7950301A4168509979941C6D765D5452 /* GFCircleQuery.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GFCircleQuery.h; path = GeoFire/API/GFCircleQuery.h; sourceTree = "<group>"; };
@@ -1037,7 +1037,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9AB5236B1E29471B006E2D5A /* FirebaseDatabase.framework in Frameworks */,
+				9A0210C21E2FC61400645D6E /* FirebaseDatabase.framework in Frameworks */,
 				1FA375816005BD73DC57C12C9D40E516 /* CoreLocation.framework in Frameworks */,
 				A83EEEDEDD3140EE175D2C85B3689135 /* Foundation.framework in Frameworks */,
 				735B1005CF6967A0B2224C691D8DAB4F /* GoogleToolboxForMac.framework in Frameworks */,
@@ -1109,7 +1109,7 @@
 		288E701E8B57097D1DDF0894983F2FF3 /* FirebaseCore */ = {
 			isa = PBXGroup;
 			children = (
-				CD8BFAB266C524C249EE66581916CF10 /* Frameworks */,
+				C7A0632743C611583648AFBCD7D0D538 /* Frameworks */,
 			);
 			path = FirebaseCore;
 			sourceTree = "<group>";
@@ -1642,20 +1642,20 @@
 			path = FBSDKLoginKit;
 			sourceTree = "<group>";
 		};
+		C7A0632743C611583648AFBCD7D0D538 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				53E79344305F07F53BB9E696252F752D /* FirebaseCore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C83812269D1F5DC87AA99869328379D4 /* GoogleInterchangeUtilities */ = {
 			isa = PBXGroup;
 			children = (
 				44FF6AA2579B2444FE986E15D29CBA9B /* Frameworks */,
 			);
 			path = GoogleInterchangeUtilities;
-			sourceTree = "<group>";
-		};
-		CD8BFAB266C524C249EE66581916CF10 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7751FDFA5D89ACA482F7E19F56C6D957 /* FirebaseCore.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CE6928625145F3500F025B7FC087F105 /* Support Files */ = {

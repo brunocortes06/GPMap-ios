@@ -18,6 +18,7 @@ class MessagesController: UITableViewController {
     var messagesDictionary = [String: Message]()
     let cellId = "cellId"
     let noPhoto:String = "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac"
+    var hasBlocked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +31,8 @@ class MessagesController: UITableViewController {
         
         //        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         
-//        let image = UIImage(named: "new_message_icon")
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
+        //        let image = UIImage(named: "new_message_icon")
+        //        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
         checkIfUserIsLoggedIn()
         
@@ -48,11 +49,46 @@ class MessagesController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
         let block =  UITableViewRowAction(style: .normal, title: "Bloquear")
         { action, index in
             print("bloquear")
+            
+            let toId = self.messages[indexPath.row].chatPartnerId()
+            let fromId = FIRAuth.auth()!.currentUser!.uid
+            let childRef = ref.childByAutoId()
+            print("toId \(toId) fromId \(fromId)")
+            
+            let userMessagesRef = FIRDatabase.database().reference().child("user-block").child(fromId).child(toId!)
+            let messageId = childRef.key
+            userMessagesRef.updateChildValues([messageId: 1])
+            
+//            let recipientUserMessagesRef = FIRDatabase.database().reference().child("user-block").child(toId!).child(fromId)
+//            recipientUserMessagesRef.updateChildValues([messageId: 1])
+            self.attemptReloadOfTable()
         }
         block.backgroundColor = UIColor.gray
+        
+        let unBlock =  UITableViewRowAction(style: .normal, title: "Desbloquear")
+        { action, index in
+            print("desbloquear")
+            self.attemptReloadOfTable()
+            self.hasBlocked = false
+            let uid = FIRAuth.auth()?.currentUser?.uid
+            
+            FIRDatabase.database().reference().child("user-block").child(uid!).child(self.messages[indexPath.row].chatPartnerId()!).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print("Falha ao desbloquear usuario \(error)")
+                    return
+                }
+            })
+        }
+        unBlock.backgroundColor = UIColor.green
+        
+        let blockRef = FIRDatabase.database().reference().child("user-block").child((FIRAuth.auth()?.currentUser?.uid)!).child(self.messages[indexPath.row].chatPartnerId()!)
+        blockRef.observe(.childAdded, with: { (snapshot) in
+            self.hasBlocked = true
+        }, withCancel: nil)
         
         let delete =  UITableViewRowAction(style: .default, title: "Deletar")
         { action, index in
@@ -68,23 +104,27 @@ class MessagesController: UITableViewController {
                 
                 self.messagesDictionary.removeValue(forKey: message.chatPartnerId()!)
                 self.attemptReloadOfTable()
-//                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-//                self.messages.remove(at: indexPath.row)
+                //                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                //                self.messages.remove(at: indexPath.row)
             })
             
         }
         delete.backgroundColor = UIColor.red
-    
-        return [delete, block]
+        
+        if(hasBlocked == true) {
+            return [delete, unBlock]
+        } else {
+            return [delete, block]
+        }
     }
     
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        if (editingStyle == UITableViewCellEditingStyle.delete) {
-//            print(indexPath)
-//        }
-//    }
+    //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    //        if (editingStyle == UITableViewCellEditingStyle.delete) {
+    //            print(indexPath)
+    //        }
+    //    }
     
-
+    
     
     func observeUserMessages() {
         let ref = FIRDatabase.database().reference().child("user-messages").child((FIRAuth.auth()?.currentUser?.uid)!)
@@ -108,7 +148,7 @@ class MessagesController: UITableViewController {
                         }
                         
                         self.attemptReloadOfTable()
-
+                        
                     }
                 }, withCancel: nil)
             }, withCancel: nil)
@@ -131,7 +171,7 @@ class MessagesController: UITableViewController {
         self.messages.sort(by: { (message1, message2) -> Bool in
             return (message1.timestamp?.intValue)! > (message2.timestamp?.intValue)!
         })
-
+        
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
@@ -200,19 +240,19 @@ class MessagesController: UITableViewController {
         return messages.count
     }
     
-    func handleNewMessage() {
-        //        let newMessageController = NewMessageController()
-        //        newMessageController.messagesController = self
-        //        let navController = UINavigationController(rootViewController: newMessageController)
-        //        present(navController, animated: true, completion: nil)
-        
-        let revealViewCOntroller:SWRevealViewController = self.revealViewController()
-        let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let desController = mainStoryboard.instantiateViewController(withIdentifier: "NewMessageController") as! NewMessageController
-        let newFrontViewController = UINavigationController.init(rootViewController:desController)
-        
-        revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
-    }
+    //    func handleNewMessage() {
+    //        let newMessageController = NewMessageController()
+    //        newMessageController.messagesController = self
+    //        let navController = UINavigationController(rootViewController: newMessageController)
+    //        present(navController, animated: true, completion: nil)
+    
+    //        let revealViewCOntroller:SWRevealViewController = self.revealViewController()
+    //        let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    //        let desController = mainStoryboard.instantiateViewController(withIdentifier: "NewMessageController") as! NewMessageController
+    //        let newFrontViewController = UINavigationController.init(rootViewController:desController)
+    //
+    //        revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+    //    }
     
     func checkIfUserIsLoggedIn() {
         if FIRAuth.auth()?.currentUser?.uid == nil {
@@ -321,7 +361,7 @@ class MessagesController: UITableViewController {
         //        } catch let logoutError {
         //            print(logoutError)
         //        }
-        //        
+        //
         //        let loginController = LoginController()
         //        loginController.messagesController = self
         //        present(loginController, animated: true, completion: nil)
