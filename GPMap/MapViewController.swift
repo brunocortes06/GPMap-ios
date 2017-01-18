@@ -39,7 +39,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
             menuBtn.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
-        
+                
         //Configurar a NavBar
         fetchUserAndSetupNavBarTitle()
         

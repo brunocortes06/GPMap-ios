@@ -386,7 +386,6 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                             }
                         }
                         let userInit = User.init(id: (FIRAuth.auth()?.currentUser?.uid)!,name: name, age: age, gender: self.gender, hair: user.hair, skin: user.skin, tel: user.tel, description: user.description, photo: user.photo)
-                        print(userInit.toAnyObject())
                         self.ref.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues(userInit.toAnyObject())
 
                     })
@@ -404,7 +403,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                     self.performSegue(withIdentifier: "ShowMap1", sender: self)
                 }
             }else{
-                print(error)
+                print(error?.localizedDescription)
             }
             
         }

@@ -40,12 +40,20 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reportar", style: .plain, target: self, action: #selector(handleReport))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleReport))
+        
         collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(ChatMesageCell.self, forCellWithReuseIdentifier: cellId)
         
         setupInputComponents()
+    }
+    
+    func handleReport() {
+        print("handleReport")
     }
     
     func observeMessages() {

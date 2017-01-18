@@ -123,6 +123,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func tokenRefreshNotification(_ notification: Notification) {
         if let refreshedToken = FIRInstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
+        } else {
+            print("InstanceID token error")
         }
         
         // Connect to FCM since connection may have failed when attempted before having a token.
@@ -137,6 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Unable to connect with FCM. \(error)")
             } else {
                 print("Connected to FCM.")
+                print(FIRInstanceID.instanceID().token()!)
             }
         }
     }

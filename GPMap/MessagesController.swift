@@ -8,11 +8,14 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 
 class MessagesController: UITableViewController {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     
+    var messages = [Message]()
+    var messagesDictionary = [String: Message]()
     let cellId = "cellId"
     let noPhoto:String = "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac"
     
@@ -32,14 +35,55 @@ class MessagesController: UITableViewController {
         
         checkIfUserIsLoggedIn()
         
+        tableView.allowsMultipleSelectionDuringEditing = true
+        
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
         
         //        observeMessages()
         //        observeUserMessages()
     }
     
-    var messages = [Message]()
-    var messagesDictionary = [String: Message]()
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let block =  UITableViewRowAction(style: .normal, title: "Bloquear")
+        { action, index in
+            print("bloquear")
+        }
+        block.backgroundColor = UIColor.gray
+        
+        let delete =  UITableViewRowAction(style: .default, title: "Deletar")
+        { action, index in
+            print("delete")
+            let uid = FIRAuth.auth()?.currentUser?.uid
+            let message = self.messages[indexPath.row]
+            
+            FIRDatabase.database().reference().child("user-messages").child(uid!).child(message.chatPartnerId()!).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print("Falha ao apagar messagem \(error)")
+                    return
+                }
+                
+                self.messagesDictionary.removeValue(forKey: message.chatPartnerId()!)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                self.messages.remove(at: indexPath.row)
+            })
+            
+        }
+        delete.backgroundColor = UIColor.red
+    
+        return [delete, block]
+    }
+    
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if (editingStyle == UITableViewCellEditingStyle.delete) {
+//            print(indexPath)
+//        }
+//    }
+    
+
     
     func observeUserMessages() {
         let ref = FIRDatabase.database().reference().child("user-messages").child((FIRAuth.auth()?.currentUser?.uid)!)
@@ -67,6 +111,11 @@ class MessagesController: UITableViewController {
                     }
                 }, withCancel: nil)
             }, withCancel: nil)
+        }, withCancel: nil)
+        
+        ref.observe(.childRemoved, with: { (snapshot) in
+            self.messagesDictionary.removeValue(forKey: snapshot.key)
+            self.attemptReloadOfTable()
         }, withCancel: nil)
     }
     var timer: Timer?
