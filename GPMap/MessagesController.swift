@@ -67,8 +67,9 @@ class MessagesController: UITableViewController {
                 }
                 
                 self.messagesDictionary.removeValue(forKey: message.chatPartnerId()!)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                self.messages.remove(at: indexPath.row)
+                self.attemptReloadOfTable()
+//                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//                self.messages.remove(at: indexPath.row)
             })
             
         }
