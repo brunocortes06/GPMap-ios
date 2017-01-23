@@ -8,12 +8,15 @@
 
 import UIKit
 import Firebase
+import FirebaseDatabase
+import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewControllerDelegate {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     
     var ref = FIRDatabase.database().reference()
+    var hasBlocked = false
     var uid: String = ""
     var viewdUserUid:String = ""
     var long:Double = 0
@@ -110,8 +113,94 @@ class ProfileViewController: UIViewController, UITextViewDelegate, SWRevealViewC
         return view
     }()
     
+    //    let optSheet: UIAlertController = {
+    //        let opt = UIAlertController()
+    ////        opt.title = "Opções"
+    //        opt.target(forAction: #selector(handleOptSheet), withSender: nil)
+    //        return opt
+    //    }()
+    
+    @IBAction func handleOpt(_ sender: Any) {
+        let alertController = UIAlertController(title: "Opções", message: "O que deseja fazer?", preferredStyle: .actionSheet)
+        let blockAction: UIAlertAction
+        if(hasBlocked == true) {
+            blockAction = UIAlertAction(title: "Desbloquear", style: .default, handler: unblockHandler)
+        } else {
+            blockAction = UIAlertAction(title: "Bloquear", style: .default, handler: blockHandler)
+        }
+        let reportAction = UIAlertAction(title: "Reportar", style: .default, handler: reportHandler)
+        
+        alertController.addAction(blockAction)
+        alertController.addAction(reportAction)
+        
+        alertController.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: { (action: UIAlertAction!) in
+            alertController.dismiss(animated: true, completion: nil)
+        }))
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func isBlocked() {
+        //Verifico se existe bloqueio
+        let blockRef = FIRDatabase.database().reference().child("user-block").child((FIRAuth.auth()?.currentUser?.uid)!).child(viewdUserUid)
+        blockRef.observe(.childAdded, with: { (snapshot) in
+            self.hasBlocked = true
+        }, withCancel: nil)
+    }
+    
+    func blockHandler(action:UIAlertAction!) {
+        print("bloquear")
+        self.hasBlocked = true
+        let toId = self.viewdUserUid
+        let fromId = FIRAuth.auth()!.currentUser!.uid
+        let childRef = self.ref.childByAutoId()
+        
+        let userMessagesRef = FIRDatabase.database().reference().child("user-block").child(fromId).child(toId)
+        let messageId = childRef.key
+        userMessagesRef.updateChildValues([messageId: 1])
+        
+        let alertcontroller = UIAlertController(title: "Aviso", message: "Usuário bloqueado, você pode desbloquear o usuário caso seja necessário", preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        alertcontroller.addAction(defaultAction)
+        self.present(alertcontroller, animated: true, completion: nil)
+        
+    }
+    
+    func unblockHandler(action:UIAlertAction!) {
+        print("desbloquear")
+        self.hasBlocked = false
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        
+        FIRDatabase.database().reference().child("user-block").child(uid!).child(self.viewdUserUid).removeValue(completionBlock: { (error, ref) in
+            if error != nil {
+                print("Falha ao desbloquear usuario \(error)")
+                return
+            } else {
+                let alertcontroller = UIAlertController(title: "Aviso", message: "Usuário desbloqueado, você pode bloquear o usuário caso seja necessário", preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                alertcontroller.addAction(defaultAction)
+                self.present(alertcontroller, animated: true, completion: nil)
+            }
+        })
+    }
+    
+    func reportHandler(action:UIAlertAction!) {
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        let reportRef = FIRDatabase.database().reference().child("user-reported").child(uid!).child(self.viewdUserUid).child("timestamp")
+        let timestamp: NSNumber = NSNumber(value: Int(Date().timeIntervalSince1970))
+        reportRef.setValue(timestamp)
+        let alertcontroller = UIAlertController(title: "Aviso", message: "Usuário reportado, você pode bloquear o usuário caso seja necessário", preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        alertcontroller.addAction(defaultAction)
+        self.present(alertcontroller, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(!self.viewdUserUid.isEmpty) {
+            isBlocked()
+        }
         
         if self.revealViewController() != nil {
             menuBtn.target = self.revealViewController()

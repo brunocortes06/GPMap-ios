@@ -17,7 +17,7 @@ import FBSDKLoginKit
 class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, UITextFieldDelegate, FBSDKLoginButtonDelegate {
     
     var name:String = ""
-    var age:String = ""
+    var age:String = "0"
     var gender:String = "Masculino"
     var long:Double = 0.0
     var lat:Double = 0.0
@@ -151,6 +151,16 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         return dtPicker
     }()
     
+    let agreementText: UILabel = {
+        let text = UILabel()
+        text.textColor = UIColor.white
+        text.font = UIFont.boldSystemFont(ofSize: 10)
+        text.textAlignment = NSTextAlignment.center
+        text.text = "Ao acessar você concorda com os termos de uso do aplicativo"
+        text.translatesAutoresizingMaskIntoConstraints = false
+        return text
+    }()
+    
     func handleLoginRegisterAction(){
         
         //Login
@@ -196,6 +206,18 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
             
             //Cadastro
         }else{
+            //Validacao de data de nascimento
+            print(self.age)
+            let ageConsist = Int(self.age)!
+            if(ageConsist < 18) {
+                let alertcontroller = UIAlertController(title: "Erro", message: "Idade inferior a permitida - necessário ter 18 anos ou mais", preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                alertcontroller.addAction(defaultAction)
+                self.present(alertcontroller, animated: true, completion: nil)
+                return
+            }
+            
+            
             FIRAuth.auth()?.createUser(withEmail: emailTextField.text!, password: passwordTextField.text!, completion: { (user, error) in
                 if error == nil {
                     let user = User.init(id: (FIRAuth.auth()?.currentUser?.uid)!,name: self.nameTextField.text!, age: String(self.age), gender: self.gender, hair: "", skin: "", tel: "", description: "", photo: "")
@@ -287,6 +309,8 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        passwordTextField.delegate = self
+        
         view.backgroundColor = UIColor(red: 61/255, green: 91/255, blue: 151/255, alpha: 1)
         
         view.addSubview(inputsContainerView)
@@ -297,7 +321,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         view.addSubview(logoImg)
         view.addSubview(loadLabel)
         view.addSubview(facebookLoginButton)
-        
+        view.addSubview(agreementText)
         
         facebookLoginButton.translatesAutoresizingMaskIntoConstraints = false
         facebookLoginButton.delegate = self
@@ -337,7 +361,6 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                         print("falhou graph facebook")
                         return
                     }
-//                    print(result)
                     
                     let today = NSDate()
                     let data:[String:AnyObject] = result as! [String : AnyObject]
@@ -349,7 +372,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                     dateFormatter.dateFormat = "dd/MM/yyyy"
                     let dateOfBirthFomatted = dateFormatter.string(from: myDate)
                     myDate = dateFormatter.date(from: dateOfBirthFomatted)!
-
+                    
                     let gregorian = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
                     if let age = gregorian.components([.year], from: myDate, to: today as Date, options: []).year {
                         let ageInt = age
@@ -385,12 +408,21 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                                 age = self.age
                             }
                         }
+                        let ageConsist: Int = Int(age)!
+                        if(ageConsist < 18) {
+                            let alertcontroller = UIAlertController(title: "Erro", message: "Idade inferior a permitida - necessário ter 18 anos ou mais", preferredStyle: .alert)
+                            let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                            alertcontroller.addAction(defaultAction)
+                            self.present(alertcontroller, animated: true, completion: nil)
+                            return
+                        }
+                        
                         let userInit = User.init(id: (FIRAuth.auth()?.currentUser?.uid)!,name: name, age: age, gender: self.gender, hair: user.hair, skin: user.skin, tel: user.tel, description: user.description, photo: user.photo)
                         self.ref.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues(userInit.toAnyObject())
-
+                        
                     })
                     
-
+                    
                 }
                 if(self.lat == 0.0){
                     self.locationManager.requestLocation()
@@ -403,7 +435,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
                     self.performSegue(withIdentifier: "ShowMap1", sender: self)
                 }
             }else{
-                print(error?.localizedDescription)
+                print(error?.localizedDescription as Any)
             }
             
         }
@@ -482,6 +514,11 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         facebookLoginButtonTopAnchor?.isActive = true
         facebookLoginButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         facebookLoginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        agreementText.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        agreementText.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: 12).isActive = true
+        agreementText.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
+        agreementText.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         inputsContainerView.addSubview(nameTextField)
         
@@ -576,5 +613,10 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        handleLoginRegisterAction()
+        return true
     }
 }

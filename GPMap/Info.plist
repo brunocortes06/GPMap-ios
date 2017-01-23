@@ -28,7 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>6</string>
 	<key>FacebookAppID</key>
 	<string>245483092537991</string>
 	<key>FacebookDisplayName</key>
@@ -42,8 +42,6 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>AppName(GPMap)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>AppName(GPMap)</string>
 	<key>NSPhotoLibraryUsageDescription</key>

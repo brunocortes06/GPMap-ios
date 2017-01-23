@@ -56,8 +56,11 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.locationManager.requestLocation()
         }
         
-        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Sair"] //"Carregar foto"
-        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "exit_icon")!]
+        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Sair"] //"Carregar foto"
+        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!]
+        
+//        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Usuários bloqueados", "Sair"] //"Carregar foto"
+//        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!, UIImage(named: "block-icon")!]
     }
     
     
@@ -79,7 +82,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         if cell.lblMenuName.text == "Sair"{
             let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let desController = mainStoryboard.instantiateViewController(withIdentifier: "MasterLoginViewController") as! LoginViewController
-//            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+            //            let newFrontViewController = UINavigationController.init(rootViewController:desController)
             try! FIRAuth.auth()?.signOut()
             let manager = FBSDKLoginManager()
             manager.logOut()
@@ -113,12 +116,12 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         
-//        if cell.lblMenuName.text == "Carregar foto"{
-//            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//            let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfilePhotoViewController") as! ProfilePhotoViewController
-//            let newFrontViewController = UINavigationController.init(rootViewController:desController)
-//            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
-//        }
+        //        if cell.lblMenuName.text == "Carregar foto"{
+        //            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        //            let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfilePhotoViewController") as! ProfilePhotoViewController
+        //            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+        //            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+        //        }
         
         if cell.lblMenuName.text == "Perfil"{
             let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -126,18 +129,34 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             let newFrontViewController = UINavigationController.init(rootViewController:desController)
             revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
         }
+        
+        if cell.lblMenuName.text == "Usuários bloqueados"{
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let desController = mainStoryboard.instantiateViewController(withIdentifier: "BlockedUsersController") as! BlockedUsersController
+            let newFrontViewController = UINavigationController.init(rootViewController:desController)
+            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+        }
+        
+        if cell.lblMenuName.text == "Termos de uso"{
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(URL(string: "https://sites.google.com/view/eula/")!, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(URL(string: "https://sites.google.com/view/eula/")!)
+            }
+            
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        lat = manager.location!.coordinate.latitude
-        long = manager.location!.coordinate.longitude
-        
-        locationManager.stopUpdatingLocation()
-        
-        //Se ja pegou a loclizacao, pegar o uid do usuario para carregar perfil
-        if (FIRAuth.auth()?.currentUser) != nil{
-            uid = (FIRAuth.auth()?.currentUser?.uid)!
+        if ( manager.location != nil) {
+            lat = manager.location!.coordinate.latitude
+            long = manager.location!.coordinate.longitude
+            
+            //Se ja pegou a loclizacao, pegar o uid do usuario para carregar perfil
+            if (FIRAuth.auth()?.currentUser) != nil{
+                locationManager.stopUpdatingLocation()
+                uid = (FIRAuth.auth()?.currentUser?.uid)!
+            }
         }
     }
     
@@ -157,23 +176,23 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }else{
                     url = URL(string: self.noPhoto)
                 }
-                 self.imgProfile?.loadImgUsingCache(url: url!)
+                self.imgProfile?.loadImgUsingCache(url: url!)
                 
-//                DispatchQueue.global().async {
-//                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-//                    DispatchQueue.main.async {
-//                        let pinImage = UIImage(data: data!)
-//                        let size = CGSize(width: 143, height: 128)
-//                        UIGraphicsBeginImageContext(size)
-//                        let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
-//                        pinImage!.draw(in: rect)
-//                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-//                        UIGraphicsEndImageContext()
-//                        self.imgProfile?.image = resizedImage
-//                        self.imgProfile?.layer.cornerRadius = 20
-//                        self.imgProfile?.layer.masksToBounds = true
-//                    }
-//                }
+                //                DispatchQueue.global().async {
+                //                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+                //                    DispatchQueue.main.async {
+                //                        let pinImage = UIImage(data: data!)
+                //                        let size = CGSize(width: 143, height: 128)
+                //                        UIGraphicsBeginImageContext(size)
+                //                        let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
+                //                        pinImage!.draw(in: rect)
+                //                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+                //                        UIGraphicsEndImageContext()
+                //                        self.imgProfile?.image = resizedImage
+                //                        self.imgProfile?.layer.cornerRadius = 20
+                //                        self.imgProfile?.layer.masksToBounds = true
+                //                    }
+                //                }
             }
             
         })

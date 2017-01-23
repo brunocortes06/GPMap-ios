@@ -55,7 +55,14 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     }
     
     func handleReport() {
-        print("handleReport")
+        let uid = FIRAuth.auth()?.currentUser?.uid
+        let reportRef = FIRDatabase.database().reference().child("user-reported").child(uid!).child((user?.id)!).child("timestamp")
+        let timestamp: NSNumber = NSNumber(value: Int(Date().timeIntervalSince1970))
+        reportRef.setValue(timestamp)
+        let alertcontroller = UIAlertController(title: "Aviso", message: "Usuário reportado, você pode bloquear o usuário caso seja necessário", preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        alertcontroller.addAction(defaultAction)
+        self.present(alertcontroller, animated: true, completion: nil)
     }
     
     func observeMessages() {

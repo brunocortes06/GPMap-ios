@@ -50,6 +50,12 @@ class MessagesController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
+        //Verifico se existe bloqueio
+        let blockRef = FIRDatabase.database().reference().child("user-block").child((FIRAuth.auth()?.currentUser?.uid)!).child(self.messages[indexPath.row].chatPartnerId()!)
+        blockRef.observe(.childAdded, with: { (snapshot) in
+            self.hasBlocked = true
+        }, withCancel: nil)
+        
         let block =  UITableViewRowAction(style: .normal, title: "Bloquear")
         { action, index in
             print("bloquear")
@@ -62,9 +68,7 @@ class MessagesController: UITableViewController {
             let userMessagesRef = FIRDatabase.database().reference().child("user-block").child(fromId).child(toId!)
             let messageId = childRef.key
             userMessagesRef.updateChildValues([messageId: 1])
-            
-//            let recipientUserMessagesRef = FIRDatabase.database().reference().child("user-block").child(toId!).child(fromId)
-//            recipientUserMessagesRef.updateChildValues([messageId: 1])
+
             self.attemptReloadOfTable()
         }
         block.backgroundColor = UIColor.gray
@@ -85,11 +89,6 @@ class MessagesController: UITableViewController {
         }
         unBlock.backgroundColor = UIColor.green
         
-        let blockRef = FIRDatabase.database().reference().child("user-block").child((FIRAuth.auth()?.currentUser?.uid)!).child(self.messages[indexPath.row].chatPartnerId()!)
-        blockRef.observe(.childAdded, with: { (snapshot) in
-            self.hasBlocked = true
-        }, withCancel: nil)
-        
         let delete =  UITableViewRowAction(style: .default, title: "Deletar")
         { action, index in
             print("delete")
@@ -104,8 +103,6 @@ class MessagesController: UITableViewController {
                 
                 self.messagesDictionary.removeValue(forKey: message.chatPartnerId()!)
                 self.attemptReloadOfTable()
-                //                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                //                self.messages.remove(at: indexPath.row)
             })
             
         }
