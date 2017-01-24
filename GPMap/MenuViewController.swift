@@ -11,6 +11,7 @@ import CoreLocation
 import FirebaseAuth
 import FirebaseDatabase
 import FBSDKLoginKit
+import GeoFire
 
 class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
     
@@ -43,18 +44,20 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        getLocation()
+        
         if let uid = FIRAuth.auth()?.currentUser?.uid {
             getProfilePhoto(uid: uid)
         }
         
         // For use in foreground
-        self.locationManager.requestWhenInUseAuthorization()
+//        self.locationManager.requestWhenInUseAuthorization()
         
-        if CLLocationManager.locationServicesEnabled() {
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            self.locationManager.requestLocation()
-        }
+//        if CLLocationManager.locationServicesEnabled() {
+//            self.locationManager.delegate = self
+//            self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+//            self.locationManager.startMonitoringSignificantLocationChanges()
+//        }
         
         menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Sair"] //"Carregar foto"
         iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!]
@@ -103,25 +106,18 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 let desController = mainStoryboard.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
                 let newFrontViewController = UINavigationController.init(rootViewController:desController)
-                desController.lat = lat
-                desController.long = long
-                desController.uid = uid
+                desController.lat = self.lat
+                desController.long = self.long
+                desController.uid = self.uid
                 revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
             }else{
-                let alertcontroller = UIAlertController(title: "Aguarde", message: "Atualizando localização", preferredStyle: .alert)
+                let alertcontroller = UIAlertController(title: "Aguarde", message: "Consultando localização", preferredStyle: .alert)
                 let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
                 alertcontroller.addAction(defaultAction)
                 self.present(alertcontroller, animated: true, completion: nil)
                 
             }
         }
-        
-        //        if cell.lblMenuName.text == "Carregar foto"{
-        //            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //            let desController = mainStoryboard.instantiateViewController(withIdentifier: "ProfilePhotoViewController") as! ProfilePhotoViewController
-        //            let newFrontViewController = UINavigationController.init(rootViewController:desController)
-        //            revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
-        //        }
         
         if cell.lblMenuName.text == "Perfil"{
             let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -177,24 +173,28 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                     url = URL(string: self.noPhoto)
                 }
                 self.imgProfile?.loadImgUsingCache(url: url!)
-                
-                //                DispatchQueue.global().async {
-                //                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                //                    DispatchQueue.main.async {
-                //                        let pinImage = UIImage(data: data!)
-                //                        let size = CGSize(width: 143, height: 128)
-                //                        UIGraphicsBeginImageContext(size)
-                //                        let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
-                //                        pinImage!.draw(in: rect)
-                //                        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-                //                        UIGraphicsEndImageContext()
-                //                        self.imgProfile?.image = resizedImage
-                //                        self.imgProfile?.layer.cornerRadius = 20
-                //                        self.imgProfile?.layer.masksToBounds = true
-                //                    }
-                //                }
+
             }
             
         })
+    }
+    
+    func getLocation(){
+        if(FIRAuth.auth()?.currentUser?.uid != nil){
+            let geofireRef = FIRDatabase.database().reference().child("locations")
+            let geoFire = GeoFire(firebaseRef: geofireRef)
+            self.uid = (FIRAuth.auth()?.currentUser?.uid)!
+            geoFire?.getLocationForKey(uid, withCallback: { (location, error) in
+                if (error != nil) {
+                    print("An error occurred getting the location for \"firebase-hq\": \(error?.localizedDescription)")
+                } else if (location != nil) {
+                    print("Location for \"firebase-hq\" is [\(location?.coordinate.latitude), \(location?.coordinate.longitude)]")
+                    self.lat = (location?.coordinate.latitude)!
+                    self.long = (location?.coordinate.longitude)!
+                } else {
+                    print("GeoFire does not contain a location for \"firebase-hq\"")
+                }
+            })
+        }
     }
 }

@@ -13,7 +13,7 @@ import Firebase
 import FirebaseDatabase
 import GeoFire
 
-class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SWRevealViewControllerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, SWRevealViewControllerDelegate {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     @IBOutlet weak var Map: MKMapView!
@@ -27,6 +27,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
     var ref = FIRDatabase.database().reference()
     var pointUid:String = ""
     var userSnap = FIRDataSnapshot()
+    let locationManager = CLLocationManager()
+    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference().child("locations"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,14 +41,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
             menuBtn.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
-                
+        
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            self.locationManager.startMonitoringSignificantLocationChanges()
+        }
+        
         //Configurar a NavBar
         fetchUserAndSetupNavBarTitle()
         
         //Definir genero do usuario para filtrar pesquisas e selecionar icone da annotation do mapa
         getCurrentUserGender()
         
-        let geoFire = GeoFire(firebaseRef: ref.child("locations"))
+        
         
         let center = CLLocation(latitude: lat, longitude: long)
         // Query locations with a radius of 100 km
@@ -74,7 +85,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         //        point.name = "teste"
         //        point.address = "adress"
         //        point.phone = "phone"
-        //
+        
         let span = MKCoordinateSpanMake(0.09, 0.09)
         
         let region = MKCoordinateRegion(center: location, span: span)
@@ -82,6 +93,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         Map.setRegion(region, animated: true)
         
         //        Map.addAnnotation(point)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("locationmanager ok")
+        if ( manager.location != nil) {
+            lat = manager.location!.coordinate.latitude
+            long = manager.location!.coordinate.longitude
+            
+            let coord = CLLocation(latitude: self.lat, longitude: self.long)
+            
+            //Se ja pegou a loclizacao, pegar o uid do usuario para carregar perfil
+            if (FIRAuth.auth()?.currentUser) != nil{
+//                locationManager.stopUpdatingLocation()
+                uid = (FIRAuth.auth()?.currentUser?.uid)!
+                geoFire?.setLocation(coord, forKey: FIRAuth.auth()?.currentUser?.uid)
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

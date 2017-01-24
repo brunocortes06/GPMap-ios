@@ -115,14 +115,6 @@ class MessagesController: UITableViewController {
         }
     }
     
-    //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-    //        if (editingStyle == UITableViewCellEditingStyle.delete) {
-    //            print(indexPath)
-    //        }
-    //    }
-    
-    
-    
     func observeUserMessages() {
         let ref = FIRDatabase.database().reference().child("user-messages").child((FIRAuth.auth()?.currentUser?.uid)!)
         ref.observe(.childAdded, with: { (snapshot) in
