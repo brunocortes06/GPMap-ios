@@ -66,7 +66,7 @@ class ProfilePhotoViewController: UIViewController, UIImagePickerControllerDeleg
 //                storageRef.child(uid).put(uploadData)
                 storageRef.child(uid).child("profile.png").put(uploadData, metadata: nil, completion: { (metadata, error) in
                     if error != nil{
-                        print(error)
+                        print(error?.localizedDescription as Any)
                         return
                     }
                     print("uid funciona \(uid)")

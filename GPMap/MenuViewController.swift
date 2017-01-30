@@ -59,11 +59,11 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
 //            self.locationManager.startMonitoringSignificantLocationChanges()
 //        }
         
-        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Sair"] //"Carregar foto"
-        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!]
+//        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Sair"] //"Carregar foto"
+//        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!]
         
-//        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Usuários bloqueados", "Sair"] //"Carregar foto"
-//        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!, UIImage(named: "block-icon")!]
+        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Usuários bloqueados", "Sair"] //"Carregar foto"
+        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "block-icon")!, UIImage(named: "exit_icon")!]
     }
     
     
@@ -131,6 +131,8 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             let desController = mainStoryboard.instantiateViewController(withIdentifier: "BlockedUsersController") as! BlockedUsersController
             let newFrontViewController = UINavigationController.init(rootViewController:desController)
             revealViewCOntroller.pushFrontViewController(newFrontViewController, animated: true)
+            desController.lat = self.lat
+            desController.long = self.long
         }
         
         if cell.lblMenuName.text == "Termos de uso"{

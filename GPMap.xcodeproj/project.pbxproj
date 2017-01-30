@@ -13,6 +13,7 @@
 		9A0E554E1E268758007B209E /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E554D1E268758007B209E /* UserCell.swift */; };
 		9A0E55501E26C0EA007B209E /* ChatMesageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */; };
 		9A0E65221E1D5CC10080267E /* ProfileHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */; };
+		9A2C29781E30EA3900544D84 /* BlockedUsersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2C29771E30EA3900544D84 /* BlockedUsersController.swift */; };
 		9A632F941E0867BF00A23309 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A632F931E0867BF00A23309 /* MapViewController.swift */; };
 		9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A767EBA1E0344E800C17C75 /* AppDelegate.swift */; };
 		9A767EBD1E0344E800C17C75 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A767EBC1E0344E800C17C75 /* ViewController.swift */; };
@@ -71,6 +72,7 @@
 		9A0E554D1E268758007B209E /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		9A0E554F1E26C0EA007B209E /* ChatMesageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMesageCell.swift; sourceTree = "<group>"; };
 		9A0E65211E1D5CC10080267E /* ProfileHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHandlers.swift; sourceTree = "<group>"; };
+		9A2C29771E30EA3900544D84 /* BlockedUsersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUsersController.swift; sourceTree = "<group>"; };
 		9A632F931E0867BF00A23309 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		9A6BA0D51E2092790013B516 /* GPMap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GPMap.entitlements; sourceTree = "<group>"; };
 		9A767EB71E0344E800C17C75 /* GPMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +178,7 @@
 				9AC24D6C1E253BC200EB0C00 /* ChatLogController.swift */,
 				9AC24D6E1E25746E00EB0C00 /* MessagesController.swift */,
 				9AC24D721E25751B00EB0C00 /* NewMessageController.swift */,
+				9A2C29771E30EA3900544D84 /* BlockedUsersController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				9AF071781E11CB8500F29598 /* CustomCalloutView.swift in Sources */,
 				9AC24D6D1E253BC200EB0C00 /* ChatLogController.swift in Sources */,
 				9A767EBB1E0344E800C17C75 /* AppDelegate.swift in Sources */,
+				9A2C29781E30EA3900544D84 /* BlockedUsersController.swift in Sources */,
 				9A0525731E14429B001428B7 /* Extensions.swift in Sources */,
 				9AC24D6F1E25746E00EB0C00 /* MessagesController.swift in Sources */,
 				9ACCA6AB1E1C93D500177310 /* ProfileViewController.swift in Sources */,
