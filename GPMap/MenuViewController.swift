@@ -13,7 +13,7 @@ import FirebaseDatabase
 import FBSDKLoginKit
 import GeoFire
 
-class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
+class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource/*, CLLocationManagerDelegate*/ {
     
     var menuNameArr:Array = [String]()
     var iconeImage:Array = [UIImage]()
@@ -22,7 +22,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     let noPhoto:String = "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac"
     var long:Double = 0.0
     var lat:Double = 0.0
-    let locationManager = CLLocationManager()
+//    let locationManager = CLLocationManager()
     var uid:String = ""
     var ref = FIRDatabase.database().reference()
     
@@ -44,23 +44,14 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        imgProfile.layer.cornerRadius = 24
+        imgProfile.layer.masksToBounds = true
+        
         getLocation()
         
         if let uid = FIRAuth.auth()?.currentUser?.uid {
             getProfilePhoto(uid: uid)
         }
-        
-        // For use in foreground
-//        self.locationManager.requestWhenInUseAuthorization()
-        
-//        if CLLocationManager.locationServicesEnabled() {
-//            self.locationManager.delegate = self
-//            self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-//            self.locationManager.startMonitoringSignificantLocationChanges()
-//        }
-        
-//        menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Sair"] //"Carregar foto"
-//        iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "exit_icon")!]
         
         menuNameArr = ["Perfil", "Mapa", "Mensagens", "Termos de uso", "Usuários bloqueados", "Sair"] //"Carregar foto"
         iconeImage = [UIImage(named: "profile_icon")!,UIImage(named: "map_icon")!,UIImage(named: "message_icon")!, UIImage(named: "eula-icon")!, UIImage(named: "block-icon")!, UIImage(named: "exit_icon")!]
@@ -145,22 +136,22 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if ( manager.location != nil) {
-            lat = manager.location!.coordinate.latitude
-            long = manager.location!.coordinate.longitude
-            
-            //Se ja pegou a loclizacao, pegar o uid do usuario para carregar perfil
-            if (FIRAuth.auth()?.currentUser) != nil{
-                locationManager.stopUpdatingLocation()
-                uid = (FIRAuth.auth()?.currentUser?.uid)!
-            }
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Error on locationManager \(error)")
-    }
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        if ( manager.location != nil) {
+//            lat = manager.location!.coordinate.latitude
+//            long = manager.location!.coordinate.longitude
+//            
+//            //Se ja pegou a loclizacao, pegar o uid do usuario para carregar perfil
+//            if (FIRAuth.auth()?.currentUser) != nil{
+//                locationManager.stopUpdatingLocation()
+//                uid = (FIRAuth.auth()?.currentUser?.uid)!
+//            }
+//        }
+//    }
+//    
+//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+//        print("Error on locationManager \(error)")
+//    }
     
     func getProfilePhoto(uid: String){
         ref.child("users").child(uid).observe(.value, with: { (snapshot) in

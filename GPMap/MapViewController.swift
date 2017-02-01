@@ -13,7 +13,7 @@ import Firebase
 import FirebaseDatabase
 import GeoFire
 
-class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, SWRevealViewControllerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, /*CLLocationManagerDelegate,*/ SWRevealViewControllerDelegate {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     @IBOutlet weak var Map: MKMapView!
@@ -27,13 +27,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
     var ref = FIRDatabase.database().reference()
     var pointUid:String = ""
     var userSnap = FIRDataSnapshot()
-    let locationManager = CLLocationManager()
+    //    let locationManager = CLLocationManager()
     let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference().child("locations"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        self.navigationItem.title = "GPmap"
+        askPermissionForCheckin()
         
         if self.revealViewController() != nil {
             menuBtn.target = self.revealViewController()
@@ -42,14 +42,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
-        // For use in foreground
-        self.locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            self.locationManager.startMonitoringSignificantLocationChanges()
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Visível", style: .plain, target: self, action: #selector(askPermissionForCheckin))
         
         //Configurar a NavBar
         fetchUserAndSetupNavBarTitle()
@@ -57,8 +50,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         //Definir genero do usuario para filtrar pesquisas e selecionar icone da annotation do mapa
         getCurrentUserGender()
         
+        //Inicializa as informacoes do mapa e coloca os pins
+        initializeMap()
         
-        
+    }
+    
+    func initializeMap() {
         let center = CLLocation(latitude: lat, longitude: long)
         // Query locations with a radius of 100 km
         let circleQuery = geoFire?.query(at: center, withRadius: 1000)
@@ -75,42 +72,44 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         let location = CLLocationCoordinate2DMake(lat, long)
         
         self.Map.delegate = self
-        //        let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
-        
-        //Carregar foto de perfil
-        //        let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/project-3448140967181391691.appspot.com/o/photos%2Fno-user-image.gif?alt=media&token=85dadcce-02e4-4af2-9bc6-e3680c601eac")
-        //        let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-        //        point.image = UIImage(data: data!)
-        ////        point.image = UIImage(named: "girl-pin.png")
-        //        point.name = "teste"
-        //        point.address = "adress"
-        //        point.phone = "phone"
         
         let span = MKCoordinateSpanMake(0.09, 0.09)
         
         let region = MKCoordinateRegion(center: location, span: span)
         
         Map.setRegion(region, animated: true)
-        
-        //        Map.addAnnotation(point)
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("locationmanager ok")
-        if ( manager.location != nil) {
-            lat = manager.location!.coordinate.latitude
-            long = manager.location!.coordinate.longitude
-            
-            let coord = CLLocation(latitude: self.lat, longitude: self.long)
-            
-            //Se ja pegou a loclizacao, pegar o uid do usuario para carregar perfil
-            if (FIRAuth.auth()?.currentUser) != nil{
-//                locationManager.stopUpdatingLocation()
-                uid = (FIRAuth.auth()?.currentUser?.uid)!
-                geoFire?.setLocation(coord, forKey: FIRAuth.auth()?.currentUser?.uid)
-            }
-        }
+    func askPermissionForCheckin() {
+        let alertcontroller = UIAlertController(title: "Aviso", message: "Deseja aparecer no mapa? Clique em sim para que outros usuários possam entrar em contato com você!", preferredStyle: .alert)
+        let checkinAction = UIAlertAction(title: "Sim", style: .default, handler: checkinHandler)
+        let checkoutAction = UIAlertAction(title: "Não", style: .default, handler: checkoutHandler)
+        alertcontroller.addAction(checkinAction)
+        alertcontroller.addAction(checkoutAction)
+        self.present(alertcontroller, animated: true, completion: nil)
     }
+    
+    func checkinHandler(action:UIAlertAction!) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Visível", style: .plain, target: self, action: #selector(askPermissionForCheckin))
+        let ref = FIRDatabase.database().reference().child("users").child(self.uid)
+        //        let timestamp: NSNumber = NSNumber(value: Int(Date().timeIntervalSince1970))
+        let today = Date()
+        let sevenDaysAfter = Calendar.current.date(byAdding: .day, value: 7, to: today)
+        let timestamp: NSNumber = NSNumber(value: Int((sevenDaysAfter?.timeIntervalSince1970)!))
+        ref.updateChildValues(["checkin": timestamp])
+        
+        let alertcontroller = UIAlertController(title: "Visível", message: "Você ficará visível no mapa por 7 dias", preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertcontroller.addAction(defaultAction)
+        self.present(alertcontroller, animated: true, completion: nil)
+    }
+    
+    func checkoutHandler(action:UIAlertAction!) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Invisível", style: .plain, target: self, action: #selector(askPermissionForCheckin))
+        let ref = FIRDatabase.database().reference().child("users").child(self.uid)
+        let timestamp: NSNumber = NSNumber(value: Int(Date().timeIntervalSince1970))
+        ref.updateChildValues(["checkin": timestamp])
+    }//YxsK6VGikTUjU3qzUUyhjG4j68A3 leiloca
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation
@@ -124,19 +123,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         }else{
             annotationView?.annotation = annotation
         }
-        //        annotationView?.image = UIImage(named: "girl-pin")
-        
-        // Resize Pin image
-        //        let pinImage = UIImage(named: "girl-pin")
-        
         
         var pinImage = UIImage(named: "girl-pin")
         if(self.userGender == "Feminino"){
             pinImage = UIImage(named: "boy_pin")
         }
         
-        
-        //        let pinImage = UIImage(named: "boy_pin")
         let size = CGSize(width: 50, height: 50)
         UIGraphicsBeginImageContext(size)
         let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width: size.width, height: size.height))
@@ -191,50 +183,49 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIImagePickerContr
         }
     }
     
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated
-        
-        
-    }
-    
     func getUserData(key: String, location: CLLocation){
         ref.child("users").child(key).observe(.value, with: { (snapshot) in
             let user = User(snapShot: snapshot)
             
-            //Filtrar para homens verem mulheres e vice-versa
-            let gender = (snapshot.value as? NSDictionary)?["gender"] as? String ?? ""
-            if((self.userGender == "Masculino" && gender == "Feminino") || (self.userGender == "Feminino" && gender == "Masculino")){
-                
-                self.userSnap = snapshot
-                if(user.name != ""){
-                    var url = URL(string: "")
-                    if(user.photo != ""){
-                        url = URL(string: user.photo)
-                    }else{
-                        url = URL(string: self.noPhoto)
+            // Verificar data de checkin
+            let checkinDate = (snapshot.value as? NSDictionary)?["checkin"] as? Int
+            if checkinDate != nil {
+                //Mostro no mapa quem fez checkin para os ultimos 7 dias
+                if checkinDate! > Int(Date().timeIntervalSince1970){
+                    
+                    //Filtrar para homens verem mulheres e vice-versa
+                    let gender = (snapshot.value as? NSDictionary)?["gender"] as? String ?? ""
+                    if((self.userGender == "Masculino" && gender == "Feminino") || (self.userGender == "Feminino" && gender == "Masculino")){
+                        
+                        self.userSnap = snapshot
+                        if(user.name != ""){
+                            var url = URL(string: "")
+                            if(user.photo != ""){
+                                url = URL(string: user.photo)
+                            }else{
+                                url = URL(string: self.noPhoto)
+                            }
+                            
+                            //                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+                            let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude ))
+                            
+                            //Carrego a imagem do cache
+                            point.loadImgUsingCache(url: url!)
+                            
+                            let userLocation = CLLocation(latitude: self.lat, longitude: self.long)
+                            let otherUser = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                            
+                            
+                            let distanceInKm = (userLocation.distance(from: otherUser))/1000 // result is in meters
+                            point.name = user.name
+                            point.address = "Distância: \(round(distanceInKm)) Km"
+                            point.phone = "Telefone: \(user.tel)"
+                            point.uid = key
+                            
+                            self.Map.addAnnotation(point)
+                            
+                        }
                     }
-                    
-                    
-                    //                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                    let point = CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude ))
-                    
-                    //Carrego a imagem do cache
-                    point.loadImgUsingCache(url: url!)
-                    
-                    let userLocation = CLLocation(latitude: self.lat, longitude: self.long)
-                    let otherUser = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                    
-                    
-                    let distanceInKm = (userLocation.distance(from: otherUser))/1000 // result is in meters
-                    point.name = user.name
-                    point.address = "Distância: \(round(distanceInKm)) Km"
-                    point.phone = "Telefone: \(user.tel)"
-                    point.uid = key
-                    
-                    self.Map.addAnnotation(point)
-                    
                 }
             }
             

@@ -334,6 +334,7 @@ class LoginViewController: UIViewController, UIPickerViewDelegate, CLLocationMan
         
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
+            locationManager.allowsBackgroundLocationUpdates = false
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.requestLocation()
             if ((FIRAuth.auth()?.currentUser) != nil){
